@@ -5,6 +5,7 @@
 # This might be super short because he doesn't appear until the end of the story lmaooo
 
 from emora_stdm import DialogueFlow
+from utils.macro_utils import *
 
 prince_introductions = {
     'state': 'start',
@@ -12,7 +13,7 @@ prince_introductions = {
         '#ERR' : {
             "`Would you care to listen to my story about my wife?`" : {
                 AGREE : {
-                    "`Wonderful.`" : 'end'
+                    "`Wonderful.`" : 'prince_beginning'
                 },
                 DISAGREE : 'rejected',
                 '#ERR' : {
@@ -29,9 +30,26 @@ prince_introductions = {
     }
 }
 
+prince_story = {
+    'state' : 'prince_beginning',
+    "`I met my wife while I was taking a stroll through the woods. I was on horseback, enjoying the beautiful view of the forest, when I came up an old cottage in the middle of it.`" : {
+        '[{dwarf, dwarves, snow white}]' : {
+            "`Yes, that's right! That was where they were living.`" : 'encounter_with_coffin'
+        },
+        '#ERR' : {
+            'state' : 'encounter_with_coffin',
+            "`And so this sudden house in the middle of the woods interested me. Who could possibly be living in the middle of these quiet woods? It was also getting quite dark, and I longed for a place to rest, so I approached the house to seek shelter for the night. The cottage was owned by seven dwarves, who thankfully accepted me to stay, yet had such sad expressions on their faces.`" : {
+                '[why, sad]' : 'end',
+                '#ERR' : 'end'
+            }
+        }
+    }
+}
+
 
 prince = DialogueFlow('start', end_state='end')
 prince.load_transitions(prince_introductions)
+prince.load_transitions(prince_story)
 
 if __name__ == '__main__':
     prince.add_macros({

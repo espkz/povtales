@@ -4,10 +4,9 @@ import operator as _operator
 import random
 import contractions
 import os
-import time
-from datetime import datetime as dt
 
 from emora_stdm import Macro, CompositeDialogueFlow
+from utils.nlu_utils import *
 
 # This serves as normalization for the NLG
 class CompositeDialogueFlow2(CompositeDialogueFlow):
