@@ -1,15 +1,27 @@
 # Author: Ellie Paek
 # Last updated: [02/16/2023]
 
-# Description: test
+# Description: Telling the story of Snow White from the prince's point of view
+# This might be super short because he doesn't appear until the end of the story lmaooo
 
 from emora_stdm import DialogueFlow
+from povtales.utils import *
 
-
-test_transitions = {
+prince_introductions = {
     'state': 'start',
-    "`Hi! Nice to meet you.`" : {
-        'error' : 'end'
+    "`Hello there, nice to meet you! I am the Prince.`" : {
+        '#ERR' : {
+            "`Would you care to listen to my story about my wife?`" : {
+                AGREE : {
+                    "`Wonderful.`" : 'end'
+                },
+                DISAGREE : 'rejected',
+                '#ERR' : {
+                    'state' : 'rejected',
+                    "`Very well, do let me know if you would like to listen to it.`" : 'end'
+                }
+            }
+        }
     },
     "` `": {
         # error catch moving onto the next topic
@@ -18,10 +30,21 @@ test_transitions = {
     }
 }
 
-# This is the DialogueFlow object that will be imported as a component of Big Emora
-test = DialogueFlow('start', end_state='end')
-test.load_transitions(test_transitions)
 
+prince = DialogueFlow('start', end_state='end')
+prince.load_transitions(prince_introductions)
 
 if __name__ == '__main__':
-    test.run(debugging=False)
+    prince.add_macros({
+        'G': VAR_GATE(),
+        'ANY_GATE': ANY_GATE(),
+        'OPEN_G': OPEN_G(),
+        'CLOSE_G': CLOSE_G(),
+        'NORMALIZE': NORMALIZE(),
+        'ERR': Error()
+    })
+    prince.load_update_rules({
+        '#NORMALIZE': None  # Always expands the contractions of what the user says
+    })
+    prince.precache_transitions()
+    prince.run(debugging=False)
