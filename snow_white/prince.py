@@ -1,11 +1,10 @@
 # Author: Ellie Paek
-# Last updated: [02/16/2023]
+# Last updated: [02/23/2023]
 
 # Description: Telling the story of Snow White from the prince's point of view
 # This might be super short because he doesn't appear until the end of the story lmaooo
 
 from emora_stdm import DialogueFlow
-from povtales.utils import *
 
 prince_introductions = {
     'state': 'start',
