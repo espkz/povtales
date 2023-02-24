@@ -49,7 +49,7 @@ prince_story_beginning = {
                     "`I was wondering the same thing!`" : 'prince_middle'
                 },
                 '#ERR' : {
-                    "`Yes, anyway, I was curious as to why they had such sad expressions.`" : 'prince_middle'
+                    "`Yes, anyway, I was wondering why they looked so sad`" : 'prince_middle'
                 }
             }
         }
@@ -72,6 +72,11 @@ prince_story_middle = {
                 }
             }
         }
+    },
+    "` `": {
+        # error catch moving onto the next topic
+        'score': 0,
+        'state': 'SYSTEM:start'
     }
 }
 
@@ -87,6 +92,11 @@ prince_story_end = {
                 }
             }
         }
+    },
+    "` `": {
+        # error catch moving onto the next topic
+        'score': 0,
+        'state': 'SYSTEM:start'
     }
 }
 
