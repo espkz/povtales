@@ -16,8 +16,19 @@ from utils.general_utils import *
 prince_introductions = {
     'state': 'start',
     "`Hello there, nice to meet you! I am the Prince.`" : {
+        # gEnErAL KeNObI
+        'state' : 'prince_faq',
+        '[name]' : {
+            "`I don't really have a first or last name, I am simply the Prince.`" : 'prince_faq'
+        },
+        '[{[where, from], [what, kind, prince]}]' : {
+            "`I am the Prince of this kingdom. Some day, I will be king.`" : 'prince_faq'
+        },
+        '[snow white]' : {
+            "`Ah, you know my wife! I am her husband. She is a very beautiful, kind woman.`" : 'prince_faq'
+        },
         '#ERR' : {
-            "`Would you care to listen to my story about my wife?`" : {
+            "`Would you like to listen to my story about my wife?`" : {
                 AGREE : {
                     "`Wonderful.`" : 'prince_beginning'
                 },
@@ -39,7 +50,16 @@ prince_introductions = {
 prince_story_beginning = {
     'state' : 'prince_beginning',
     "`It all started when I was on horseback, strolling through the forest, when I came upon an old cottage.`" : {
+        'state' : 'stroll_faq',
+        '[why, {walk, stroll, walking, strolling, [on, {horse, horseback}]}]' : {
+            "`Well, the weather was really nice! Plus, the trees were beautiful that day.`" : 'stroll_faq'
+        },
+        '[horse]' : {
+            'score' : 0.9,
+            "`I have a very wonderful horse. They don't have a name but they are very loyal.`" : 'stroll_faq'
+        },
         '[{dwarf, dwarves, snow white}]' : {
+            'score' : 1.5,
             "`Yes, that's right! That was where they were living.`" : 'meet_dwarves'
         },
         '#ERR' : {
