@@ -1,5 +1,5 @@
 # Author: Ellie Paek
-# Last updated: [02/23/2023]
+# Last updated: [02/24/2023]
 
 # Description: Telling the story of Snow White from the prince's point of view
 # This might be super short because he doesn't appear until the end of the story lmaooo
@@ -8,6 +8,7 @@
 # To Do:
 # connect stories to elsewhere (global??)
 # end module
+# what if someone comes back after talking to another character? would there be a save point?
 
 from emora_stdm import DialogueFlow
 from utils.general_utils import *
