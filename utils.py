@@ -12,9 +12,13 @@ from langchain.schema.runnable import RunnableParallel, RunnablePassthrough
 embeddings = OpenAIEmbeddings()
 memory = MemorySaver()
 
+stories = {
+    "Snow White" : "stories/snow_white.txt"
+}
+
 class StoryChatbot():
     def __init__(self, story, role, age, model):
-        self.db = self.create_story_db(story)
+        self.db = self.create_story_db(stories[story])
         self.retriever = self.db.as_retriever(search_kwargs={"k" : 3})
         self.story = story
         self.role = role
