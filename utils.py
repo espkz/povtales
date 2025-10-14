@@ -9,7 +9,6 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.schema.runnable import RunnableParallel, RunnablePassthrough
 
-embeddings = OpenAIEmbeddings()
 memory = MemorySaver()
 
 stories = {
@@ -17,7 +16,9 @@ stories = {
 }
 
 class StoryChatbot():
-    def __init__(self, story, role, age, model):
+    def __init__(self, story, role, age, model, api_key = None):
+        self.embeddings = OpenAIEmbeddings(api_key=api_key)
+
         self.db = self.create_story_db(stories[story])
         self.retriever = self.db.as_retriever(search_kwargs={"k" : 3})
         self.story = story
@@ -26,7 +27,7 @@ class StoryChatbot():
 
         self.system_prompt = self.configure_system_prompt()
 
-        self.llm = ChatOpenAI(model=model)
+        self.llm = ChatOpenAI(model=model, api_key=api_key)
 
         self.prompt = ChatPromptTemplate.from_messages([
             ("system", self.system_prompt),
@@ -35,14 +36,18 @@ class StoryChatbot():
             ("system", "Relevant context:\n{context}")
         ])
 
+        self.history = []
+
         self.chain =  (
             RunnableParallel(
                 {
                     "input" : RunnablePassthrough(),
-                    "history" : lambda x: memory.load_memory_variables({})["history"],
+                    "history" : lambda x: self.history,
                     "context" : self.get_context
                 }
             )
+            | self.prompt
+            | self.llm
         )
 
     def get_context(self, user_input):
@@ -53,7 +58,7 @@ class StoryChatbot():
     def configure_system_prompt(self):
         with open('prompt.md', 'r') as f:
             prompt = f.read()
-        prompt.format(role=self.role, story=self.story, age=self.age)
+        prompt = prompt.format(role=self.role, story=self.story, age=self.age)
         return prompt
 
 
@@ -64,9 +69,12 @@ class StoryChatbot():
         splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap= 100)
         docs = splitter.split_documents(documents)
 
-        db = FAISS.from_documents(docs, embeddings)
+        db = FAISS.from_documents(docs, self.embeddings)
         return db
 
     def respond(self, user_input):
         result = self.chain.invoke({"input" : user_input})
+
+        self.history.append(("user", user_input))
+        self.history.append(("assistant", result.content))
         return result.content

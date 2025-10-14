@@ -1,3 +1,6 @@
 langchain
 langgraph
 openai
+tiktoken
+streamlit
+langchain-community
