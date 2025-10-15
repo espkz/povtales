@@ -29,26 +29,45 @@ class StoryChatbot():
 
         self.llm = ChatOpenAI(model=model, api_key=api_key)
 
-        self.prompt = ChatPromptTemplate.from_messages([
+        self.prompt = self.build_prompt()
+
+        self.history = []
+
+        self.chain = self.build_chain()
+
+    def build_prompt(self):
+        return ChatPromptTemplate.from_messages([
             ("system", self.system_prompt),
             MessagesPlaceholder(variable_name="history"),
             ("user", "{input}"),
             ("system", "Relevant context:\n{context}")
         ])
 
+    def build_chain(self):
+        return (
+                RunnableParallel(
+                    {
+                        "input": RunnablePassthrough(),
+                        "history": lambda x: self.history,
+                        "context": self.get_context
+                    }
+                )
+                | self.prompt
+                | self.llm
+        )
+
+    def set_character(self, new_role: str, new_age: int = None):
+        self.role = new_role
+        if new_age is not None:
+            self.age = new_age
+
+        # reset conversation history
         self.history = []
 
-        self.chain =  (
-            RunnableParallel(
-                {
-                    "input" : RunnablePassthrough(),
-                    "history" : lambda x: self.history,
-                    "context" : self.get_context
-                }
-            )
-            | self.prompt
-            | self.llm
-        )
+        # rebuild system prompt and template
+        self.system_prompt = self.configure_system_prompt()
+        self.prompt = self.build_prompt()
+        self.chain = self.build_chain()
 
     def get_context(self, user_input):
         docs = self.retriever.get_relevant_documents(user_input["input"])
