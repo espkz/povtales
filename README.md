@@ -22,3 +22,5 @@ What if stories were told from the perspective of the characters? - Langchain an
 - [ ] Add more fairy tales/stories
 - [ ] Alternatively, adding an area for a story (link or text or otherwise), and processing the story and the characters from there
 - [ ] Update Langchain functions
+### Reach Goals
+- [ ] Expand to more media (movies, games, etc.)
