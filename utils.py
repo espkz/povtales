@@ -11,22 +11,16 @@ from langchain.schema.runnable import RunnableParallel, RunnablePassthrough
 
 memory = MemorySaver()
 
-stories = {
-    "Snow White" : "stories/snow_white.txt"
-}
-
 class StoryChatbot():
-    def __init__(self, story, role, age, model, api_key = None):
+    def __init__(self, story_name, story_path, role, age, model, api_key = None):
         self.embeddings = OpenAIEmbeddings(api_key=api_key)
-
-        self.db = self.create_story_db(stories[story])
+        self.db = self.create_story_db(story_path)
         self.retriever = self.db.as_retriever(search_kwargs={"k" : 3})
-        self.story = story
+        self.story = story_name
         self.role = role
         self.age = age
 
         self.system_prompt = self.configure_system_prompt()
-
         self.llm = ChatOpenAI(model=model, api_key=api_key)
 
         self.prompt = self.build_prompt()
@@ -75,7 +69,7 @@ class StoryChatbot():
 
 
     def configure_system_prompt(self):
-        with open('prompt.md', 'r') as f:
+        with open("prompt.md", "r", encoding="utf-8") as f:
             prompt = f.read()
         prompt = prompt.format(role=self.role, story=self.story, age=self.age)
         return prompt

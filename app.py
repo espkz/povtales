@@ -1,6 +1,7 @@
 import streamlit as st
 from utils import StoryChatbot
 from openai import OpenAI
+import json
 
 st.set_page_config(page_title="Story Chatbot", layout="wide")
 
@@ -34,14 +35,28 @@ if st.session_state.get('api_key', '') != api_key:
         st.session_state['api_key'] = api_key
         st.info("Your OpenAI API key is validated")
 
+# configurations
+configurations = {
+    "Snow White" : "snow_white",
+    "Sleeping Beauty" : "sleeping_beauty"
+}
+
 st.sidebar.header("Configuration")
-story = st.sidebar.selectbox("Choose a story", ["Snow White"])
-chr = st.sidebar.selectbox("Choose a character", ["Snow White", "Prince", "Queen", "Hunter"])
+if "current_story" not in st.session_state:
+    st.session_state.current_story = ""
+story = st.sidebar.selectbox("Choose a story", configurations.keys())
+story_file = f'story_configurations/{configurations[story]}.json'
+with open(story_file, 'r') as f:
+    data = json.load(f)
+    characters = data['characters']
+    story_path = data['story_path']
+chr = st.sidebar.selectbox("Choose a character", characters)
 age = st.sidebar.number_input("What's your age?", min_value=3, max_value=18, value=8, step=1)
 # for the sake of cost using gpt-5-nano is the best
 model = st.sidebar.selectbox("Model", ["gpt-4o-mini", "gpt-4o", "gpt-5-nano", "gpt-5-mini"])
 
 # set character and age
+
 if "selected_character" not in st.session_state:
     st.session_state.selected_character = chr
 
@@ -49,7 +64,27 @@ if "selected_age" not in st.session_state:
     st.session_state.selected_age = age
 
 if "chatbot" not in st.session_state:
-    st.session_state.chatbot = StoryChatbot(story=story, role=chr, age=age, model=model, api_key=api_key)
+    st.session_state.chatbot = StoryChatbot(
+        story_name=story,
+        story_path=story_path,
+        role=chr,
+        age=age,
+        model=model,
+        api_key=api_key
+    )
+    st.session_state.messages = []
+
+# remake bot if story change
+if story != st.session_state.current_story:
+    st.session_state.current_story = story
+    st.session_state.chatbot = StoryChatbot(
+        story_name=story,
+        story_path=story_path,
+        role=chr,
+        age=age,
+        model=model,
+        api_key=api_key
+    )
     st.session_state.messages = []
 
 chatbot = st.session_state.chatbot
@@ -69,6 +104,7 @@ if age_changed:
     chatbot.set_character(chr, age)
     st.session_state.selected_age = age
 
+
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
@@ -78,7 +114,9 @@ if prompt := st.chat_input("Speak to the character!"):
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    response = chatbot.respond(prompt)
+    with st.chat_message("assistant"):
+        with st.spinner(f"{chatbot.role} is thinking..."):
+            response = chatbot.respond(prompt)
     st.session_state.messages.append({"role": "assistant", "content": response})
     with st.chat_message("assistant"):
         st.markdown(response)
