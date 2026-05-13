@@ -1,0 +1,58 @@
+[
+  {
+    "id": "birth_of_snow_white",
+    "order": 1,
+    "summary": "Snow White is born after her mother wishes for a child with skin white as snow, lips red as blood, and hair black as ebony.",
+    "characters_present": ["snow_white"],
+    "known_by": ["snow_white"]
+  },
+  {
+    "id": "queen_mirror_warning",
+    "order": 2,
+    "summary": "The magic mirror tells the Queen that Snow White is fairer than she is.",
+    "characters_present": ["queen"],
+    "known_by": ["queen"]
+  },
+  {
+    "id": "hunter_spares_snow_white",
+    "order": 3,
+    "summary": "The Hunter takes Snow White into the forest but cannot kill her, so he lets her escape.",
+    "characters_present": ["snow_white", "hunter"],
+    "known_by": ["snow_white", "hunter", "queen"]
+  },
+  {
+    "id": "dwarves_cottage",
+    "order": 4,
+    "summary": "Snow White finds the dwarves' cottage and is allowed to stay with them.",
+    "characters_present": ["snow_white"],
+    "known_by": ["snow_white"]
+  },
+  {
+    "id": "poisoned_apple",
+    "order": 5,
+    "summary": "The Queen disguises herself and gives Snow White a poisoned apple.",
+    "characters_present": ["snow_white", "queen"],
+    "known_by": ["snow_white", "queen"]
+  },
+  {
+    "id": "glass_coffin",
+    "order": 6,
+    "summary": "The dwarves mourn Snow White and place her in a glass coffin.",
+    "characters_present": ["snow_white"],
+    "known_by": ["snow_white", "prince"]
+  },
+  {
+    "id": "snow_white_awakens",
+    "order": 7,
+    "summary": "The Prince's servants carry the coffin, the apple piece is dislodged, and Snow White wakes.",
+    "characters_present": ["snow_white", "prince"],
+    "known_by": ["snow_white", "prince"]
+  },
+  {
+    "id": "wedding_and_banishment",
+    "order": 8,
+    "summary": "Snow White and the Prince marry, and the Queen is banished from the land.",
+    "characters_present": ["snow_white", "prince", "queen"],
+    "known_by": ["snow_white", "prince", "queen"]
+  }
+]

@@ -1,7 +1,9 @@
 langchain
-langgraph
+langchain-community
+langchain-core
+langchain-openai
+langchain-text-splitters
 openai
 tiktoken
 streamlit
-langchain-community
 faiss-cpu

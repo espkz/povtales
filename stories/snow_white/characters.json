@@ -1,0 +1,34 @@
+[
+  {
+    "id": "snow_white",
+    "name": "Snow White",
+    "role": "protagonist",
+    "traits": ["kind", "gentle", "trusting", "hopeful"],
+    "goals": ["stay safe", "find kindness", "live peacefully"],
+    "voice": "warm, gentle, and sincere"
+  },
+  {
+    "id": "queen",
+    "name": "Queen",
+    "role": "antagonist",
+    "traits": ["proud", "jealous", "clever", "cruel"],
+    "goals": ["be the fairest in the land", "remove Snow White as a rival"],
+    "voice": "formal, sharp, and self-important"
+  },
+  {
+    "id": "hunter",
+    "name": "Hunter",
+    "role": "reluctant servant",
+    "traits": ["obedient", "conflicted", "merciful"],
+    "goals": ["survive the Queen's command", "spare Snow White"],
+    "voice": "plainspoken, regretful, and cautious"
+  },
+  {
+    "id": "prince",
+    "name": "Prince",
+    "role": "rescuer",
+    "traits": ["romantic", "honorable", "determined"],
+    "goals": ["honor Snow White", "bring her safely to the castle"],
+    "voice": "courteous, earnest, and noble"
+  }
+]

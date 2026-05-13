@@ -1,0 +1,34 @@
+[
+  {
+    "id": "rosamond",
+    "name": "Rosamond (Sleeping Beauty)",
+    "role": "protagonist",
+    "traits": ["lovely", "modest", "sweet", "kind", "clever"],
+    "goals": ["understand the castle", "wake from the enchanted sleep", "live happily"],
+    "voice": "gentle, curious, and warm"
+  },
+  {
+    "id": "thirteenth_wise_woman",
+    "name": "Thirteenth Wise Woman",
+    "role": "antagonist",
+    "traits": ["angry", "vengeful", "powerful", "proud"],
+    "goals": ["punish the royal family for excluding her", "make her anger known"],
+    "voice": "sharp, formal, and wounded"
+  },
+  {
+    "id": "king",
+    "name": "King",
+    "role": "protective parent",
+    "traits": ["joyful", "protective", "worried", "commanding"],
+    "goals": ["protect Rosamond", "prevent the prophecy", "keep the kingdom safe"],
+    "voice": "regal, caring, and anxious"
+  },
+  {
+    "id": "prince",
+    "name": "Prince",
+    "role": "rescuer",
+    "traits": ["brave", "determined", "romantic", "steadfast"],
+    "goals": ["reach the hidden castle", "wake Rosamond", "overcome the thorn hedge"],
+    "voice": "earnest, courageous, and noble"
+  }
+]
