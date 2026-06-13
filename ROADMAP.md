@@ -113,14 +113,14 @@ Tasks:
 
 - Add character profiles with traits, voice, goals, fears, and relationships.
 - Add character knowledge rules based on timeline events. Done for current timeline `known_by` data.
-- Scope retrieval to what the selected character could know. Partially done through timeline summaries; source chunks still need event tagging before restrictive modes can safely retrieve raw passages.
+- Scope retrieval to what the selected character could know. Done with timeline-tagged source passages and spoiler-aware retrieval filters.
 - Add a user-selectable story moment or chapter. Done.
 - Add spoiler settings. Done:
   - no spoilers
   - spoilers up to selected timeline point
   - full-story spoilers
 
-Status: in progress. The app now has timeline selection, spoiler controls, and prompt-level knowledge boundaries. The remaining Phase 3 work is to enrich character profiles with fears/relationships and tag source chunks or passages by timeline event so retrieval can be filtered more precisely.
+Status: mostly complete. The app now has timeline selection, spoiler controls, prompt-level knowledge boundaries, and retrieval filtered by timeline-tagged source passages. The remaining Phase 3 polish is to enrich character profiles with fears and relationships.
 
 Resume value:
 
@@ -132,15 +132,17 @@ Goal: reduce contradictions and make the AI feel more trustworthy.
 
 Tasks:
 
-- Add a canon checker that reviews generated responses for contradictions.
-- Ask the model to revise when a response violates canon or character knowledge.
-- Show optional "story grounding" passages in the UI for debugging.
-- Track which retrieved passages influenced each answer.
+- Add a canon checker that reviews generated responses for contradictions. Done for a first LLM-based validation pass.
+- Ask the model to revise when a response violates canon or character knowledge. Done with one revision pass.
+- Show optional "story grounding" passages in the UI for debugging. Done.
+- Track which retrieved passages influenced each answer. Partially done through displayed allowed source context; structured per-answer citation tracking is still future work.
 - Add response modes:
   - chat
   - retell scene
   - explain motivation
   - continue scene
+
+Status: in progress. The app now validates draft responses for canon, spoiler, point-of-view, age, and tone issues, then revises once when needed. Remaining Phase 4 work is richer source citation tracking and response modes.
 
 Possible flow:
 

@@ -1,4 +1,5 @@
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -27,6 +28,13 @@ class TimelineEvent:
 
 
 @dataclass(frozen=True)
+class SourcePassage:
+    event_id: str
+    event_order: int
+    text: str
+
+
+@dataclass(frozen=True)
 class StoryPackage:
     id: str
     title: str
@@ -39,6 +47,7 @@ class StoryPackage:
     source_path: Path
     characters: list[CharacterProfile]
     timeline: list[TimelineEvent]
+    passages: list[SourcePassage]
 
 
 def load_story_packages(stories_dir: Path = STORIES_DIR) -> dict[str, StoryPackage]:
@@ -98,6 +107,7 @@ def load_story_packages(stories_dir: Path = STORIES_DIR) -> dict[str, StoryPacka
             source_path=source_path,
             characters=characters,
             timeline=timeline,
+            passages=build_source_passages(source_path, timeline),
         )
 
         packages[story.title] = story
@@ -168,6 +178,32 @@ def get_events_known_by(
     ]
 
 
+def get_allowed_event_ids(
+    story: StoryPackage,
+    character_id: str,
+    event_id: str | None,
+    spoiler_mode: str,
+) -> list[str]:
+    if spoiler_mode == "No spoilers":
+        events = get_events_known_by(story, character_id, event_id)
+    elif spoiler_mode == "Spoilers up to selected moment":
+        events = get_events_until(story, event_id)
+    elif spoiler_mode == "Full-story spoilers":
+        events = get_events_until(story, None)
+    else:
+        raise ValueError(f"Unknown spoiler mode: {spoiler_mode}")
+
+    return [event.id for event in events]
+
+
+def get_passages_for_events(
+    story: StoryPackage,
+    event_ids: list[str],
+) -> list[SourcePassage]:
+    allowed = set(event_ids)
+    return [passage for passage in story.passages if passage.event_id in allowed]
+
+
 def format_timeline_events(events: list[TimelineEvent]) -> str:
     if not events:
         return "None yet."
@@ -176,6 +212,65 @@ def format_timeline_events(events: list[TimelineEvent]) -> str:
         f"- {event.order}. {event.summary}"
         for event in sorted(events, key=lambda event: event.order)
     )
+
+
+def build_source_passages(
+    source_path: Path,
+    timeline: list[TimelineEvent],
+) -> list[SourcePassage]:
+    if not timeline:
+        return []
+
+    paragraphs = split_source_text(
+        source_path.read_text(encoding="utf-8"),
+        min_passages=len(timeline),
+    )
+    if not paragraphs:
+        return []
+
+    passages = []
+    events = sorted(timeline, key=lambda event: event.order)
+
+    for index, paragraph in enumerate(paragraphs):
+        event_index = min(
+            len(events) - 1,
+            index * len(events) // len(paragraphs),
+        )
+        event = events[event_index]
+        passages.append(
+            SourcePassage(
+                event_id=event.id,
+                event_order=event.order,
+                text=paragraph,
+            )
+        )
+
+    return passages
+
+
+def split_source_text(source_text: str, min_passages: int) -> list[str]:
+    paragraphs = [
+        paragraph.strip()
+        for paragraph in source_text.split("\n\n")
+        if paragraph.strip()
+    ]
+    if len(paragraphs) >= min_passages:
+        return paragraphs
+
+    lines = [
+        line.strip()
+        for line in source_text.splitlines()
+        if line.strip()
+    ]
+    if len(lines) >= min_passages:
+        return lines
+
+    sentences = [
+        sentence.strip()
+        for sentence in re.split(r"(?<=[.!?])\s+", source_text)
+        if sentence.strip()
+    ]
+    return sentences or paragraphs
 
 
 def format_character_profile(character: CharacterProfile) -> str:

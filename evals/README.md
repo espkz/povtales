@@ -1,6 +1,6 @@
 # POVTales Evaluations
 
-The evaluation suite checks whether story timeline and spoiler boundaries are being enforced before the app sends context to the model.
+The evaluation suite checks whether story timeline, source retrieval, and spoiler boundaries are being enforced before the app sends context to the model.
 
 Run it from the project root:
 
@@ -27,5 +27,7 @@ The runner reads `evals/cases.json` and writes JSON plus Markdown reports to `ev
 - `expected_allowed_event_ids`: events the response context may use as canon.
 - `forbidden_known_event_ids`: events the character must not personally know.
 - `forbidden_allowed_event_ids`: events the response context must not reveal.
+- `expected_source_event_ids`: optional source-passage event tags that must be retrievable.
+- `forbidden_source_event_ids`: optional source-passage event tags that must not be retrievable. If omitted, `forbidden_allowed_event_ids` is reused.
 
-These evals do not call the OpenAI API. They are deterministic checks for the story engine's context rules. A later Phase 4 or Phase 5 pass can reuse the same cases to evaluate generated model responses for canon fidelity, voice, spoiler safety, and age appropriateness.
+These evals do not call the OpenAI API. They are deterministic checks for the story engine's context and tagged-source retrieval rules. A later Phase 4 or Phase 5 pass can reuse the same cases to evaluate generated model responses for canon fidelity, voice, spoiler safety, and age appropriateness.

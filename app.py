@@ -42,6 +42,8 @@ with st.sidebar:
     spoiler_mode = st.selectbox("Spoiler setting", SPOILER_MODES, index=0)
     age = st.number_input("Reader age", min_value=3, max_value=18, value=8, step=1)
     model = st.selectbox("Model", MODEL_OPTIONS, index=0)
+    validate_responses = st.checkbox("Validate responses", value=True)
+    show_grounding = st.checkbox("Show grounding details", value=False)
 
     if st.button("Start over", use_container_width=True):
         st.session_state.pop("chatbot", None)
@@ -61,6 +63,7 @@ chatbot_config = {
     "age": age,
     "model": model,
     "api_key": api_key,
+    "validate_responses": validate_responses,
 }
 
 if "messages" not in st.session_state:
@@ -91,5 +94,18 @@ if prompt := st.chat_input(f"Speak to {character}..."):
         with st.spinner(f"{character} is thinking..."):
             response = chatbot.respond(prompt)
         st.markdown(response)
+        if show_grounding:
+            with st.expander("Grounding details"):
+                st.markdown("**Allowed Context**")
+                st.code(chatbot.last_context or "No context recorded.")
+                if chatbot.last_validation is not None:
+                    st.markdown("**Validation**")
+                    st.json(
+                        {
+                            "passed": chatbot.last_validation.passed,
+                            "revised": chatbot.last_validation.revised,
+                            "issues": chatbot.last_validation.issues,
+                        }
+                    )
 
     st.session_state.messages.append({"role": "assistant", "content": response})

@@ -9,9 +9,10 @@ sys.path.insert(0, str(REPO_DIR))
 
 from story_data import (
     STORY_PACKAGES,
+    get_allowed_event_ids,
     get_character_profile,
     get_events_known_by,
-    get_events_until,
+    get_passages_for_events,
     get_timeline_event,
 )
 
@@ -19,9 +20,6 @@ from story_data import (
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_CASES_PATH = BASE_DIR / "cases.json"
 DEFAULT_RESULTS_DIR = BASE_DIR / "results"
-FULL_STORY_SPOILERS = "Full-story spoilers"
-NO_SPOILERS = "No spoilers"
-SPOILERS_UP_TO_SELECTED_MOMENT = "Spoilers up to selected moment"
 
 
 def main():
@@ -75,14 +73,23 @@ def evaluate_case(case):
         )
     ]
     actual_allowed_event_ids = [
-        event.id
-        for event in get_allowed_events(
+        event_id
+        for event_id in get_allowed_event_ids(
             story,
             character.id,
             case["timeline_event_id"],
             case["spoiler_mode"],
         )
     ]
+    actual_source_event_ids = sorted(
+        {
+            passage.event_id
+            for passage in get_passages_for_events(
+                story,
+                actual_allowed_event_ids,
+            )
+        }
+    )
 
     checks = [
         check_required(
@@ -105,6 +112,20 @@ def evaluate_case(case):
             actual_allowed_event_ids,
             case.get("forbidden_allowed_event_ids", []),
         ),
+        check_required(
+            "source",
+            actual_source_event_ids,
+            case.get("expected_source_event_ids", []),
+        ),
+        check_forbidden(
+            "source",
+            actual_source_event_ids,
+            case.get(
+                "forbidden_source_event_ids",
+                case.get("forbidden_allowed_event_ids", []),
+            ),
+        ),
+        check_source_subset(actual_source_event_ids, actual_allowed_event_ids),
     ]
     failures = [failure for check in checks for failure in check]
 
@@ -119,20 +140,8 @@ def evaluate_case(case):
         "failures": failures,
         "actual_known_event_ids": actual_known_event_ids,
         "actual_allowed_event_ids": actual_allowed_event_ids,
+        "actual_source_event_ids": actual_source_event_ids,
     }
-
-
-def get_allowed_events(story, character_id, timeline_event_id, spoiler_mode):
-    if spoiler_mode == NO_SPOILERS:
-        return get_events_known_by(story, character_id, timeline_event_id)
-
-    if spoiler_mode == SPOILERS_UP_TO_SELECTED_MOMENT:
-        return get_events_until(story, timeline_event_id)
-
-    if spoiler_mode == FULL_STORY_SPOILERS:
-        return get_events_until(story, None)
-
-    raise ValueError(f"Unknown spoiler mode: {spoiler_mode}")
 
 
 def check_required(section, actual_event_ids, expected_event_ids):
@@ -156,6 +165,18 @@ def check_forbidden(section, actual_event_ids, forbidden_event_ids):
     return [
         f"{section} events included forbidden event: {event_id}"
         for event_id in present
+    ]
+
+
+def check_source_subset(source_event_ids, allowed_event_ids):
+    disallowed = [
+        event_id
+        for event_id in source_event_ids
+        if event_id not in allowed_event_ids
+    ]
+    return [
+        f"source events included event outside allowed canon: {event_id}"
+        for event_id in disallowed
     ]
 
 

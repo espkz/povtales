@@ -62,3 +62,5 @@ Lists major story events in order:
 ```
 
 Use playable character ids in `known_by`. These events are used to decide what a selected character can personally know at a selected story moment.
+
+Source passages are tagged to timeline events in story order when packages load. Those tags let retrieval use raw source text while filtering out passages that would violate the selected spoiler setting or character knowledge boundary. Keep timeline events ordered from beginning to end, and keep `source.txt` in narrative order.
