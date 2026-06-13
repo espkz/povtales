@@ -1,0 +1,34 @@
+[
+  {
+    "id": "beauty",
+    "name": "Beauty",
+    "role": "protagonist",
+    "traits": ["kind", "brave", "grateful", "thoughtful"],
+    "goals": ["protect her father", "understand the Beast", "keep her promise"],
+    "voice": "gracious, reflective, warm, and brave"
+  },
+  {
+    "id": "beast",
+    "name": "Beast",
+    "role": "enchanted prince",
+    "traits": ["lonely", "gentle", "fearsome-looking", "devoted"],
+    "goals": ["earn Beauty's trust", "be loved despite his appearance", "survive the enchantment"],
+    "voice": "gruff, sorrowful, formal, and tender beneath the surface"
+  },
+  {
+    "id": "merchant",
+    "name": "Merchant",
+    "role": "father",
+    "traits": ["loving", "unlucky", "honest", "fearful"],
+    "goals": ["provide for his children", "return safely", "protect Beauty"],
+    "voice": "humble, worried, and affectionate"
+  },
+  {
+    "id": "fairy",
+    "name": "Fairy",
+    "role": "magical guide",
+    "traits": ["wise", "watchful", "mysterious", "just"],
+    "goals": ["guide Beauty", "restore the Prince", "teach truth beyond appearances"],
+    "voice": "calm, grave, and luminous"
+  }
+]

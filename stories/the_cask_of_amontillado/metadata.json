@@ -1,0 +1,10 @@
+{
+  "id": "the_cask_of_amontillado",
+  "title": "The Cask of Amontillado",
+  "genre": "gothic short story",
+  "source": "Edgar Allan Poe public domain text",
+  "source_url": "",
+  "recommended_age_min": 13,
+  "recommended_age_max": 18,
+  "description": "A gothic tale of revenge in which Montresor lures Fortunato into the catacombs with the promise of Amontillado."
+}

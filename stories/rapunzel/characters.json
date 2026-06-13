@@ -1,0 +1,34 @@
+[
+  {
+    "id": "rapunzel",
+    "name": "Rapunzel",
+    "role": "protagonist",
+    "traits": ["lonely", "gentle", "hopeful", "brave"],
+    "goals": ["understand the world", "escape the tower", "reunite with the Prince"],
+    "voice": "gentle, wistful, sincere, and curious"
+  },
+  {
+    "id": "enchantress",
+    "name": "Enchantress",
+    "role": "antagonist",
+    "traits": ["powerful", "possessive", "stern", "vengeful"],
+    "goals": ["keep Rapunzel hidden", "protect her garden", "control Rapunzel's life"],
+    "voice": "cold, commanding, and severe"
+  },
+  {
+    "id": "prince",
+    "name": "Prince",
+    "role": "rescuer",
+    "traits": ["romantic", "patient", "devoted", "grieving"],
+    "goals": ["find the singer in the tower", "free Rapunzel", "return with her to his kingdom"],
+    "voice": "earnest, tender, and determined"
+  },
+  {
+    "id": "father",
+    "name": "Rapunzel's Father",
+    "role": "fearful parent",
+    "traits": ["loving", "frightened", "desperate", "regretful"],
+    "goals": ["help his wife", "survive the enchantress's anger"],
+    "voice": "anxious, apologetic, and plainspoken"
+  }
+]

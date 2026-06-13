@@ -1,0 +1,58 @@
+[
+  {
+    "id": "miller_boasts",
+    "order": 1,
+    "summary": "The miller boasts to the King that his daughter can spin straw into gold.",
+    "characters_present": ["king"],
+    "known_by": ["king"]
+  },
+  {
+    "id": "first_room_gold",
+    "order": 2,
+    "summary": "The King locks the miller's daughter in a room of straw, and Rumpelstiltskin spins it into gold for her necklace.",
+    "characters_present": ["miller_daughter", "king", "rumpelstiltskin"],
+    "known_by": ["miller_daughter", "king", "rumpelstiltskin"]
+  },
+  {
+    "id": "second_room_gold",
+    "order": 3,
+    "summary": "The King demands more gold, and Rumpelstiltskin spins a larger room of straw for the girl's ring.",
+    "characters_present": ["miller_daughter", "king", "rumpelstiltskin"],
+    "known_by": ["miller_daughter", "king", "rumpelstiltskin"]
+  },
+  {
+    "id": "child_promise",
+    "order": 4,
+    "summary": "Rumpelstiltskin spins the third room of straw after the girl promises him her first child if she becomes Queen.",
+    "characters_present": ["miller_daughter", "rumpelstiltskin", "king"],
+    "known_by": ["miller_daughter", "rumpelstiltskin", "king"]
+  },
+  {
+    "id": "queen_has_baby",
+    "order": 5,
+    "summary": "The miller's daughter becomes Queen and later has a baby.",
+    "characters_present": ["miller_daughter", "king"],
+    "known_by": ["miller_daughter", "king"]
+  },
+  {
+    "id": "name_challenge",
+    "order": 6,
+    "summary": "Rumpelstiltskin appears to claim the baby but gives the Queen three days to guess his name.",
+    "characters_present": ["miller_daughter", "rumpelstiltskin"],
+    "known_by": ["miller_daughter", "rumpelstiltskin"]
+  },
+  {
+    "id": "messenger_hears_name",
+    "order": 7,
+    "summary": "The messenger hears Rumpelstiltskin singing his name beside a fire near a little hut.",
+    "characters_present": ["messenger", "rumpelstiltskin"],
+    "known_by": ["messenger", "rumpelstiltskin", "miller_daughter"]
+  },
+  {
+    "id": "queen_guesses_name",
+    "order": 8,
+    "summary": "The Queen guesses Rumpelstiltskin's name, and he destroys himself in fury.",
+    "characters_present": ["miller_daughter", "rumpelstiltskin"],
+    "known_by": ["miller_daughter", "rumpelstiltskin"]
+  }
+]

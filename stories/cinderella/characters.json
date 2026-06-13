@@ -1,0 +1,34 @@
+[
+  {
+    "id": "cinderella",
+    "name": "Cinderella",
+    "role": "protagonist",
+    "traits": ["kind", "patient", "gentle", "resilient"],
+    "goals": ["honor her mother's words", "endure hardship", "go to the festival", "find happiness"],
+    "voice": "soft, hopeful, humble, and sincere"
+  },
+  {
+    "id": "stepmother",
+    "name": "Stepmother",
+    "role": "antagonist",
+    "traits": ["proud", "cold", "controlling", "unfair"],
+    "goals": ["advance her daughters", "keep Cinderella lowly"],
+    "voice": "sharp, dismissive, and self-important"
+  },
+  {
+    "id": "stepsister",
+    "name": "Stepsister",
+    "role": "rival",
+    "traits": ["vain", "proud", "jealous", "performative"],
+    "goals": ["attend the festival", "win the Prince", "outshine Cinderella"],
+    "voice": "haughty, dramatic, and insecure"
+  },
+  {
+    "id": "prince",
+    "name": "Prince",
+    "role": "rescuer",
+    "traits": ["romantic", "persistent", "honorable"],
+    "goals": ["find the mysterious dancer", "marry his true bride"],
+    "voice": "courteous, earnest, and determined"
+  }
+]

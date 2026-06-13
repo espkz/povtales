@@ -112,13 +112,15 @@ Goal: make the bot behave like a character with limited knowledge, not an omnisc
 Tasks:
 
 - Add character profiles with traits, voice, goals, fears, and relationships.
-- Add character knowledge rules based on timeline events.
-- Scope retrieval to what the selected character could know.
-- Add a user-selectable story moment or chapter.
-- Add spoiler settings:
+- Add character knowledge rules based on timeline events. Done for current timeline `known_by` data.
+- Scope retrieval to what the selected character could know. Partially done through timeline summaries; source chunks still need event tagging before restrictive modes can safely retrieve raw passages.
+- Add a user-selectable story moment or chapter. Done.
+- Add spoiler settings. Done:
   - no spoilers
   - spoilers up to selected timeline point
   - full-story spoilers
+
+Status: in progress. The app now has timeline selection, spoiler controls, and prompt-level knowledge boundaries. The remaining Phase 3 work is to enrich character profiles with fears/relationships and tag source chunks or passages by timeline event so retrieval can be filtered more precisely.
 
 Resume value:
 
@@ -176,10 +178,12 @@ Score responses for:
 
 Tasks:
 
-- Add `evals/` with sample prompts and expected constraints.
-- Write a simple evaluation runner.
-- Save results as JSON or Markdown.
+- Add `evals/` with sample prompts and expected constraints. Done for deterministic timeline/spoiler cases.
+- Write a simple evaluation runner. Done for no-API context-rule checks.
+- Save results as JSON or Markdown. Done; reports are written to `evals/results/`.
 - Add a README section showing example eval results.
+
+Status: in progress. The project now has deterministic evaluations for Phase 3 context rules. The next evaluation layer should run model responses against the same cases and score canon fidelity, character consistency, spoiler safety, age appropriateness, and retrieval relevance.
 
 Resume value:
 

@@ -2,15 +2,19 @@
 
 What if stories were told from the perspective of the characters?
 
-POVTales is a small Streamlit app for chatting with story characters. The chatbot uses retrieval over the source story so characters can answer in a way that stays grounded in the original text.
+POVTales is a Streamlit app for chatting with story characters. It loads local story packages, uses each package as canon, and keeps the conversation aware of character point of view, story timeline, and spoiler settings.
+
+The app does not fetch story text from the web at runtime. A story becomes available only when it has a local package under `stories/`.
 
 ## Current Features
 
-- Chat with a selected character from a story
-- Retrieve relevant story passages before each response
-- Adapt language for a reader's age
-- Keep the character's point of view during conversation
-- Load story metadata, characters, and timelines from story packages
+- Dynamic story and character loading from local story packages
+- Character profiles with voice, traits, and goals
+- Story-moment selection and spoiler policy controls
+- Timeline-aware character knowledge boundaries
+- Retrieval over source text for full-story spoiler mode
+- Reader-age guidance in the system prompt
+- Deterministic evals for timeline and spoiler rules
 
 ## Project Roadmap
 
@@ -25,11 +29,34 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Enter your OpenAI API key in the sidebar when the app opens.
+Enter your OpenAI API key in the sidebar when the app opens. Then choose:
+
+- Story
+- Character
+- Story moment
+- Spoiler setting
+- Reader age
+- Model
+
+Spoiler modes:
+
+- `No spoilers`: the character only uses events they personally know at the selected moment.
+- `Spoilers up to selected moment`: the answer may use canon up to the selected moment while separating story facts from personal character knowledge.
+- `Full-story spoilers`: the answer may use the whole source story when asked.
+
+## Run Evaluations
+
+The deterministic evaluation suite checks timeline and spoiler boundaries without calling the OpenAI API:
+
+```bash
+.venv/bin/python evals/run_evals.py
+```
+
+Results are written to `evals/results/`.
 
 ## Story Packages
 
-Stories live in folders under `stories/`:
+Each story lives in its own folder:
 
 ```text
 stories/
@@ -40,17 +67,57 @@ stories/
     timeline.json
 ```
 
-The app discovers story packages automatically as long as all four files exist.
+The app discovers packages automatically as long as all four files exist. Timeline `known_by` values should use character ids; those events drive spoiler and point-of-view boundaries in the chat.
 
 ## Included Stories
 
-- [Snow White](https://www.dltk-teach.com/rhymes/snowwhite/story.htm)
+### Fairy Tales
+
+- [Beauty and the Beast](stories/beauty_and_the_beast/source.txt)
+  - Beauty
+  - Beast
+  - Merchant
+  - Fairy
+- [Cinderella](stories/cinderella/source.txt)
+  - Cinderella
+  - Stepmother
+  - Stepsister
+  - Prince
+- [Little Red Riding Hood](stories/little_red_riding_hood/source.txt)
+  - Little Red Riding Hood
+  - Wolf
+  - Grandmother
+  - Huntsman
+- [Rapunzel](stories/rapunzel/source.txt)
+  - Rapunzel
+  - Enchantress
+  - Prince
+  - Rapunzel's Father
+- [Rumpelstiltskin](stories/rumpelstiltskin/source.txt)
+  - Miller's Daughter
+  - Rumpelstiltskin
+  - King
+  - Messenger
+- [Snow White](stories/snow_white/source.txt)
   - Snow White
   - Prince
   - Queen
   - Hunter
-- [Sleeping Beauty](https://www.grimmstories.com/en/grimm_fairy-tales/sleeping_beauty)
+- [Sleeping Beauty](stories/sleeping_beauty/source.txt)
   - Rosamond (Sleeping Beauty)
   - Thirteenth Wise Woman
   - King
   - Prince
+
+### Short Stories
+
+- [The Cask of Amontillado](stories/the_cask_of_amontillado/source.txt)
+  - Montresor
+  - Fortunato
+  - Luchresi
+  - Montresor's Attendant
+- [The Tell-Tale Heart](stories/the_tell_tale_heart/source.txt)
+  - Narrator
+  - Old Man
+  - Police Officer
+  - Neighbor

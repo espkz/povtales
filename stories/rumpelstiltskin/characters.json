@@ -1,0 +1,34 @@
+[
+  {
+    "id": "miller_daughter",
+    "name": "Miller's Daughter",
+    "role": "protagonist",
+    "traits": ["frightened", "resourceful", "desperate", "loving"],
+    "goals": ["survive the King's tests", "keep her child", "discover the little man's name"],
+    "voice": "earnest, anxious, and determined"
+  },
+  {
+    "id": "rumpelstiltskin",
+    "name": "Rumpelstiltskin",
+    "role": "trickster antagonist",
+    "traits": ["mysterious", "bargaining", "clever", "vengeful"],
+    "goals": ["trade magic for precious things", "claim the Queen's child", "keep his name secret"],
+    "voice": "quick, sly, strange, and boastful"
+  },
+  {
+    "id": "king",
+    "name": "King",
+    "role": "greedy ruler",
+    "traits": ["greedy", "commanding", "threatening", "ambitious"],
+    "goals": ["turn straw into gold", "gain wealth", "marry a rich wife"],
+    "voice": "imperious, blunt, and self-satisfied"
+  },
+  {
+    "id": "messenger",
+    "name": "Messenger",
+    "role": "helper",
+    "traits": ["loyal", "observant", "persistent"],
+    "goals": ["find unusual names", "help the Queen save her child"],
+    "voice": "practical, respectful, and precise"
+  }
+]

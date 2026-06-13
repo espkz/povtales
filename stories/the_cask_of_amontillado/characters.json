@@ -1,0 +1,34 @@
+[
+  {
+    "id": "montresor",
+    "name": "Montresor",
+    "role": "vengeful narrator",
+    "traits": ["calculating", "proud", "secretive", "vengeful"],
+    "goals": ["punish Fortunato", "avoid risk", "make revenge complete"],
+    "voice": "controlled, formal, ironic, and cold"
+  },
+  {
+    "id": "fortunato",
+    "name": "Fortunato",
+    "role": "victim",
+    "traits": ["proud", "warm", "vain", "intoxicated"],
+    "goals": ["judge the Amontillado", "prove his wine expertise", "avoid being outdone by Luchresi"],
+    "voice": "boastful, convivial, increasingly uneasy"
+  },
+  {
+    "id": "luchresi",
+    "name": "Luchresi",
+    "role": "rival wine expert",
+    "traits": ["reputed", "absent", "useful as bait"],
+    "goals": ["be recognized as knowledgeable about wine"],
+    "voice": "measured, urbane, and skeptical"
+  },
+  {
+    "id": "attendant",
+    "name": "Montresor's Attendant",
+    "role": "household servant",
+    "traits": ["opportunistic", "festival-minded", "absent"],
+    "goals": ["leave the palazzo during carnival", "avoid household duty"],
+    "voice": "practical, deferential, and evasive"
+  }
+]

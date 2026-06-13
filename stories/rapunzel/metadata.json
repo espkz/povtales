@@ -1,0 +1,10 @@
+{
+  "id": "rapunzel",
+  "title": "Rapunzel",
+  "genre": "fairy tale",
+  "source": "local public-domain-style retelling",
+  "source_url": "",
+  "recommended_age_min": 6,
+  "recommended_age_max": 12,
+  "description": "A fairy tale about a girl taken by an enchantress, locked in a tower, and reunited with a prince after years apart."
+}

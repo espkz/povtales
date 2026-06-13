@@ -1,0 +1,58 @@
+[
+  {
+    "id": "narrator_claims_sanity",
+    "order": 1,
+    "summary": "The narrator insists he is not mad and says his senses, especially hearing, have become painfully sharp.",
+    "characters_present": ["narrator"],
+    "known_by": ["narrator"]
+  },
+  {
+    "id": "eye_obsession_begins",
+    "order": 2,
+    "summary": "The narrator becomes obsessed with the old man's pale blue eye and decides to kill him despite claiming to love him.",
+    "characters_present": ["narrator", "old_man"],
+    "known_by": ["narrator"]
+  },
+  {
+    "id": "seven_nights_watching",
+    "order": 3,
+    "summary": "For seven nights, the narrator secretly opens the old man's door at midnight but finds the eye closed.",
+    "characters_present": ["narrator", "old_man"],
+    "known_by": ["narrator"]
+  },
+  {
+    "id": "eighth_night_old_man_wakes",
+    "order": 4,
+    "summary": "On the eighth night, the old man wakes after hearing a noise and sits terrified in the dark.",
+    "characters_present": ["narrator", "old_man"],
+    "known_by": ["narrator", "old_man"]
+  },
+  {
+    "id": "narrator_kills_old_man",
+    "order": 5,
+    "summary": "The narrator opens the lantern, sees the eye, hears the heartbeat, and kills the old man beneath the bed.",
+    "characters_present": ["narrator", "old_man", "neighbor"],
+    "known_by": ["narrator", "old_man", "neighbor"]
+  },
+  {
+    "id": "body_hidden_under_floor",
+    "order": 6,
+    "summary": "The narrator dismembers the body and hides it beneath three floorboards, leaving no visible blood.",
+    "characters_present": ["narrator"],
+    "known_by": ["narrator"]
+  },
+  {
+    "id": "police_arrive",
+    "order": 7,
+    "summary": "Three police officers arrive after a neighbor reports a shriek, and the narrator claims the old man is away.",
+    "characters_present": ["narrator", "police_officer"],
+    "known_by": ["narrator", "police_officer", "neighbor"]
+  },
+  {
+    "id": "narrator_confesses",
+    "order": 8,
+    "summary": "Convinced he hears the dead man's heart beneath the floor and that the officers know, the narrator confesses.",
+    "characters_present": ["narrator", "police_officer"],
+    "known_by": ["narrator", "police_officer"]
+  }
+]

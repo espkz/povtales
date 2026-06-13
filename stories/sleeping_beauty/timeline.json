@@ -3,29 +3,29 @@
     "id": "frog_prophecy",
     "order": 1,
     "summary": "A frog tells the Queen she will have a daughter within a year.",
-    "characters_present": ["king", "rosamond"],
-    "known_by": ["king", "rosamond"]
+    "characters_present": ["king"],
+    "known_by": ["king"]
   },
   {
     "id": "royal_feast",
     "order": 2,
     "summary": "The King holds a feast for the princess and invites twelve wise women, leaving out the thirteenth.",
     "characters_present": ["king", "rosamond", "thirteenth_wise_woman"],
-    "known_by": ["king", "rosamond", "thirteenth_wise_woman"]
+    "known_by": ["king", "thirteenth_wise_woman"]
   },
   {
     "id": "curse_and_softening",
     "order": 3,
     "summary": "The thirteenth wise woman curses Rosamond to prick her finger and die, but the twelfth wise woman softens the curse into a hundred-year sleep.",
     "characters_present": ["king", "rosamond", "thirteenth_wise_woman"],
-    "known_by": ["king", "rosamond", "thirteenth_wise_woman"]
+    "known_by": ["king", "thirteenth_wise_woman"]
   },
   {
     "id": "spindles_burned",
     "order": 4,
     "summary": "The King orders all spindles in the kingdom to be burned to protect Rosamond.",
     "characters_present": ["king"],
-    "known_by": ["king", "rosamond"]
+    "known_by": ["king"]
   },
   {
     "id": "tower_spindle",
@@ -39,7 +39,7 @@
     "order": 6,
     "summary": "The entire castle falls asleep, and a thick hedge of thorns grows around it.",
     "characters_present": ["king", "rosamond"],
-    "known_by": ["king", "rosamond", "prince"]
+    "known_by": ["king", "rosamond"]
   },
   {
     "id": "prince_reaches_castle",

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "mother_dies",
+    "order": 1,
+    "summary": "Cinderella's mother tells her to stay kind and good before dying.",
+    "characters_present": ["cinderella"],
+    "known_by": ["cinderella"]
+  },
+  {
+    "id": "stepfamily_mistreats_cinderella",
+    "order": 2,
+    "summary": "Cinderella's stepmother and stepsisters take her fine clothes and force her to work by the hearth.",
+    "characters_present": ["cinderella", "stepmother", "stepsister"],
+    "known_by": ["cinderella", "stepmother", "stepsister"]
+  },
+  {
+    "id": "hazel_tree_grows",
+    "order": 3,
+    "summary": "Cinderella plants a hazel twig on her mother's grave, and a white bird begins granting her wishes.",
+    "characters_present": ["cinderella"],
+    "known_by": ["cinderella"]
+  },
+  {
+    "id": "festival_announced",
+    "order": 4,
+    "summary": "The King announces a three-day festival where the Prince will seek a bride.",
+    "characters_present": ["cinderella", "stepmother", "stepsister", "prince"],
+    "known_by": ["cinderella", "stepmother", "stepsister", "prince"]
+  },
+  {
+    "id": "birds_sort_lentils",
+    "order": 5,
+    "summary": "Birds help Cinderella sort lentils from the ashes, but her stepmother still refuses to let her attend.",
+    "characters_present": ["cinderella", "stepmother", "stepsister"],
+    "known_by": ["cinderella", "stepmother", "stepsister"]
+  },
+  {
+    "id": "first_two_balls",
+    "order": 6,
+    "summary": "Cinderella attends the first two nights of the festival in magical gowns and escapes before her family recognizes her.",
+    "characters_present": ["cinderella", "prince", "stepmother", "stepsister"],
+    "known_by": ["cinderella", "prince"]
+  },
+  {
+    "id": "golden_slipper_lost",
+    "order": 7,
+    "summary": "On the third night, Cinderella loses a golden slipper on the palace stairs as she flees.",
+    "characters_present": ["cinderella", "prince"],
+    "known_by": ["cinderella", "prince"]
+  },
+  {
+    "id": "slipper_fits_cinderella",
+    "order": 8,
+    "summary": "The Prince brings the slipper to Cinderella's home, and it fits Cinderella perfectly.",
+    "characters_present": ["cinderella", "prince", "stepmother", "stepsister"],
+    "known_by": ["cinderella", "prince", "stepmother", "stepsister"]
+  },
+  {
+    "id": "cinderella_marries_prince",
+    "order": 9,
+    "summary": "Cinderella forgives her stepfamily and marries the Prince.",
+    "characters_present": ["cinderella", "prince", "stepmother", "stepsister"],
+    "known_by": ["cinderella", "prince", "stepmother", "stepsister"]
+  }
+]

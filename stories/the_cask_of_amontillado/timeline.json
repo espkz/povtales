@@ -1,0 +1,58 @@
+[
+  {
+    "id": "montresor_vows_revenge",
+    "order": 1,
+    "summary": "After enduring injuries and an insult, Montresor secretly vows revenge against Fortunato.",
+    "characters_present": ["montresor", "fortunato"],
+    "known_by": ["montresor"]
+  },
+  {
+    "id": "amontillado_ruse",
+    "order": 2,
+    "summary": "During carnival, Montresor meets Fortunato and tempts him with doubts about a supposed cask of Amontillado.",
+    "characters_present": ["montresor", "fortunato", "luchresi"],
+    "known_by": ["montresor", "fortunato"]
+  },
+  {
+    "id": "attendants_absent",
+    "order": 3,
+    "summary": "Montresor has arranged for his attendants to leave the palazzo during carnival by ordering them to stay home.",
+    "characters_present": ["montresor", "attendant"],
+    "known_by": ["montresor", "attendant"]
+  },
+  {
+    "id": "descent_into_catacombs",
+    "order": 4,
+    "summary": "Montresor leads Fortunato down into the damp catacombs while Fortunato insists on continuing despite his cough.",
+    "characters_present": ["montresor", "fortunato"],
+    "known_by": ["montresor", "fortunato"]
+  },
+  {
+    "id": "motto_and_trowel",
+    "order": 5,
+    "summary": "In the catacombs, Montresor describes his family arms and motto, then shows Fortunato a trowel when asked if he is a mason.",
+    "characters_present": ["montresor", "fortunato"],
+    "known_by": ["montresor", "fortunato"]
+  },
+  {
+    "id": "fortunato_chained",
+    "order": 6,
+    "summary": "Montresor leads Fortunato into a recess and chains him to the granite wall.",
+    "characters_present": ["montresor", "fortunato"],
+    "known_by": ["montresor", "fortunato"]
+  },
+  {
+    "id": "wall_built",
+    "order": 7,
+    "summary": "Montresor builds a masonry wall across the recess while Fortunato sobers, struggles, screams, and pleads.",
+    "characters_present": ["montresor", "fortunato"],
+    "known_by": ["montresor", "fortunato"]
+  },
+  {
+    "id": "final_stone",
+    "order": 8,
+    "summary": "Montresor seals the last stone, restores the bones against the wall, and says no one has disturbed them for fifty years.",
+    "characters_present": ["montresor", "fortunato"],
+    "known_by": ["montresor"]
+  }
+]

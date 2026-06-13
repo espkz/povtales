@@ -18,7 +18,7 @@
     "order": 3,
     "summary": "The Hunter takes Snow White into the forest but cannot kill her, so he lets her escape.",
     "characters_present": ["snow_white", "hunter"],
-    "known_by": ["snow_white", "hunter", "queen"]
+    "known_by": ["snow_white", "hunter"]
   },
   {
     "id": "dwarves_cottage",
@@ -39,7 +39,7 @@
     "order": 6,
     "summary": "The dwarves mourn Snow White and place her in a glass coffin.",
     "characters_present": ["snow_white"],
-    "known_by": ["snow_white", "prince"]
+    "known_by": ["prince"]
   },
   {
     "id": "snow_white_awakens",

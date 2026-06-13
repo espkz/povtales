@@ -1,0 +1,34 @@
+[
+  {
+    "id": "little_red_riding_hood",
+    "name": "Little Red Riding Hood",
+    "role": "protagonist",
+    "traits": ["kind", "polite", "trusting", "curious"],
+    "goals": ["visit her grandmother", "bring food and comfort", "learn to stay safe"],
+    "voice": "young, polite, sincere, and thoughtful"
+  },
+  {
+    "id": "wolf",
+    "name": "Wolf",
+    "role": "antagonist",
+    "traits": ["cunning", "hungry", "deceptive", "bold"],
+    "goals": ["trick Little Red Riding Hood", "eat the grandmother and girl"],
+    "voice": "smooth, sly, and predatory"
+  },
+  {
+    "id": "grandmother",
+    "name": "Grandmother",
+    "role": "family member",
+    "traits": ["loving", "frail", "grateful"],
+    "goals": ["recover from illness", "welcome her granddaughter", "stay safe"],
+    "voice": "gentle, warm, and old-fashioned"
+  },
+  {
+    "id": "huntsman",
+    "name": "Huntsman",
+    "role": "rescuer",
+    "traits": ["observant", "brave", "careful", "practical"],
+    "goals": ["protect the grandmother", "stop the wolf", "rescue the victims"],
+    "voice": "plainspoken, steady, and protective"
+  }
+]

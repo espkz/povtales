@@ -18,6 +18,15 @@ class CharacterProfile:
 
 
 @dataclass(frozen=True)
+class TimelineEvent:
+    id: str
+    order: int
+    summary: str
+    characters_present: list[str]
+    known_by: list[str]
+
+
+@dataclass(frozen=True)
 class StoryPackage:
     id: str
     title: str
@@ -29,11 +38,14 @@ class StoryPackage:
     description: str
     source_path: Path
     characters: list[CharacterProfile]
-    timeline: list[dict]
+    timeline: list[TimelineEvent]
 
 
 def load_story_packages(stories_dir: Path = STORIES_DIR) -> dict[str, StoryPackage]:
     packages = {}
+
+    if not stories_dir.exists():
+        return packages
 
     for story_dir in sorted(path for path in stories_dir.iterdir() if path.is_dir()):
         metadata_path = story_dir / "metadata.json"
@@ -49,7 +61,7 @@ def load_story_packages(stories_dir: Path = STORIES_DIR) -> dict[str, StoryPacka
 
         metadata = _read_json(metadata_path)
         character_data = _read_json(characters_path)
-        timeline = _read_json(timeline_path)
+        timeline_data = _read_json(timeline_path)
 
         characters = [
             CharacterProfile(
@@ -62,6 +74,17 @@ def load_story_packages(stories_dir: Path = STORIES_DIR) -> dict[str, StoryPacka
             )
             for item in character_data
         ]
+        timeline = [
+            TimelineEvent(
+                id=item["id"],
+                order=item["order"],
+                summary=item["summary"],
+                characters_present=item.get("characters_present", []),
+                known_by=item.get("known_by", []),
+            )
+            for item in timeline_data
+        ]
+        timeline = sorted(timeline, key=lambda event: event.order)
 
         story = StoryPackage(
             id=metadata["id"],
@@ -92,6 +115,67 @@ def get_character_profile(story: StoryPackage, character_name: str) -> Character
             return character
 
     raise ValueError(f"{character_name} is not available for {story.title}")
+
+
+def get_timeline_labels(story: StoryPackage) -> list[str]:
+    return [format_timeline_label(event) for event in story.timeline]
+
+
+def format_timeline_label(event: TimelineEvent) -> str:
+    return f"{event.order}. {event.summary}"
+
+
+def get_timeline_event_by_label(story: StoryPackage, label: str) -> TimelineEvent:
+    for event in story.timeline:
+        if format_timeline_label(event) == label:
+            return event
+
+    raise ValueError(f"{label} is not a timeline event for {story.title}")
+
+
+def get_timeline_event(story: StoryPackage, event_id: str) -> TimelineEvent:
+    for event in story.timeline:
+        if event.id == event_id:
+            return event
+
+    raise ValueError(f"{event_id} is not a timeline event for {story.title}")
+
+
+def get_events_until(story: StoryPackage, event_id: str | None) -> list[TimelineEvent]:
+    if not story.timeline:
+        return []
+
+    if event_id is None:
+        return sorted(story.timeline, key=lambda event: event.order)
+
+    selected_event = get_timeline_event(story, event_id)
+    return [
+        event
+        for event in sorted(story.timeline, key=lambda event: event.order)
+        if event.order <= selected_event.order
+    ]
+
+
+def get_events_known_by(
+    story: StoryPackage,
+    character_id: str,
+    event_id: str | None,
+) -> list[TimelineEvent]:
+    return [
+        event
+        for event in get_events_until(story, event_id)
+        if character_id in event.known_by
+    ]
+
+
+def format_timeline_events(events: list[TimelineEvent]) -> str:
+    if not events:
+        return "None yet."
+
+    return "\n".join(
+        f"- {event.order}. {event.summary}"
+        for event in sorted(events, key=lambda event: event.order)
+    )
 
 
 def format_character_profile(character: CharacterProfile) -> str:

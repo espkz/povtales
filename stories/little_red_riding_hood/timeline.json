@@ -1,0 +1,51 @@
+[
+  {
+    "id": "mother_sends_errand",
+    "order": 1,
+    "summary": "Little Red Riding Hood's mother sends her through the forest with cake and wine for her sick grandmother.",
+    "characters_present": ["little_red_riding_hood"],
+    "known_by": ["little_red_riding_hood"]
+  },
+  {
+    "id": "wolf_learns_destination",
+    "order": 2,
+    "summary": "The wolf meets Little Red Riding Hood and learns where her grandmother lives.",
+    "characters_present": ["little_red_riding_hood", "wolf"],
+    "known_by": ["little_red_riding_hood", "wolf"]
+  },
+  {
+    "id": "girl_strays_for_flowers",
+    "order": 3,
+    "summary": "The wolf persuades Little Red Riding Hood to leave the path and pick flowers.",
+    "characters_present": ["little_red_riding_hood", "wolf"],
+    "known_by": ["little_red_riding_hood", "wolf"]
+  },
+  {
+    "id": "wolf_swallows_grandmother",
+    "order": 4,
+    "summary": "The wolf reaches the cottage first, swallows the grandmother, and disguises himself in her bed.",
+    "characters_present": ["wolf", "grandmother"],
+    "known_by": ["wolf", "grandmother"]
+  },
+  {
+    "id": "wolf_swallows_girl",
+    "order": 5,
+    "summary": "Little Red Riding Hood arrives, mistakes the wolf for her grandmother, and is swallowed whole.",
+    "characters_present": ["little_red_riding_hood", "wolf"],
+    "known_by": ["little_red_riding_hood", "wolf"]
+  },
+  {
+    "id": "huntsman_rescues_them",
+    "order": 6,
+    "summary": "The huntsman cuts open the sleeping wolf and rescues Little Red Riding Hood and her grandmother.",
+    "characters_present": ["little_red_riding_hood", "grandmother", "huntsman", "wolf"],
+    "known_by": ["little_red_riding_hood", "grandmother", "huntsman"]
+  },
+  {
+    "id": "second_wolf_defeated",
+    "order": 7,
+    "summary": "Later, Little Red Riding Hood and her grandmother defeat another wolf by staying cautious and locking the door.",
+    "characters_present": ["little_red_riding_hood", "grandmother", "wolf"],
+    "known_by": ["little_red_riding_hood", "grandmother"]
+  }
+]

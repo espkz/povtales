@@ -1,0 +1,86 @@
+[
+  {
+    "id": "merchant_loses_fortune",
+    "order": 1,
+    "summary": "The merchant loses his house, ships, goods, and wealth, and his family retreats to a poor cottage in the forest.",
+    "characters_present": ["beauty", "merchant"],
+    "known_by": ["beauty", "merchant"]
+  },
+  {
+    "id": "beauty_requests_rose",
+    "order": 2,
+    "summary": "When the merchant leaves to investigate a ship, Beauty asks only for his safe return and, when pressed, for a rose.",
+    "characters_present": ["beauty", "merchant"],
+    "known_by": ["beauty", "merchant"]
+  },
+  {
+    "id": "merchant_finds_castle",
+    "order": 3,
+    "summary": "Lost in snow, the merchant finds a splendid empty castle where food, warmth, and shelter appear for him.",
+    "characters_present": ["merchant"],
+    "known_by": ["merchant", "beast"]
+  },
+  {
+    "id": "beast_rose_bargain",
+    "order": 4,
+    "summary": "The Beast catches the merchant taking a rose and agrees to spare him if one daughter willingly comes to the castle.",
+    "characters_present": ["merchant", "beast"],
+    "known_by": ["merchant", "beast"]
+  },
+  {
+    "id": "beauty_volunteers",
+    "order": 5,
+    "summary": "After hearing the bargain, Beauty chooses to return with her father and stay with the Beast.",
+    "characters_present": ["beauty", "merchant"],
+    "known_by": ["beauty", "merchant"]
+  },
+  {
+    "id": "beauty_arrives_castle",
+    "order": 6,
+    "summary": "Beauty arrives at the palace, confirms she came willingly, and the Beast sends her father home.",
+    "characters_present": ["beauty", "merchant", "beast"],
+    "known_by": ["beauty", "merchant", "beast"]
+  },
+  {
+    "id": "beauty_dreams_prince",
+    "order": 7,
+    "summary": "Beauty dreams of a handsome Prince and a stately lady who warn her not to trust appearances.",
+    "characters_present": ["beauty", "fairy"],
+    "known_by": ["beauty", "fairy"]
+  },
+  {
+    "id": "beast_proposes",
+    "order": 8,
+    "summary": "The Beast visits Beauty each evening and repeatedly asks if she will marry him, but she refuses at first.",
+    "characters_present": ["beauty", "beast"],
+    "known_by": ["beauty", "beast"]
+  },
+  {
+    "id": "beauty_visits_home",
+    "order": 9,
+    "summary": "Beauty longs for home, and the Beast lets her visit her father for two months if she promises to return.",
+    "characters_present": ["beauty", "beast", "merchant"],
+    "known_by": ["beauty", "beast", "merchant"]
+  },
+  {
+    "id": "beauty_returns_to_beast",
+    "order": 10,
+    "summary": "After dreaming the Beast is dying, Beauty returns to the palace and finds him weak in the garden.",
+    "characters_present": ["beauty", "beast", "fairy"],
+    "known_by": ["beauty", "beast", "fairy"]
+  },
+  {
+    "id": "beast_transformed",
+    "order": 11,
+    "summary": "Beauty agrees to marry the Beast, the enchantment breaks, and he becomes the Prince.",
+    "characters_present": ["beauty", "beast", "fairy"],
+    "known_by": ["beauty", "beast", "fairy"]
+  },
+  {
+    "id": "beauty_marries_prince",
+    "order": 12,
+    "summary": "The Fairy summons Beauty's family, and Beauty and the Prince are married with great joy.",
+    "characters_present": ["beauty", "beast", "merchant", "fairy"],
+    "known_by": ["beauty", "beast", "merchant", "fairy"]
+  }
+]

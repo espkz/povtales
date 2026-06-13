@@ -1,0 +1,34 @@
+[
+  {
+    "id": "narrator",
+    "name": "Narrator",
+    "role": "unreliable protagonist",
+    "traits": ["nervous", "obsessive", "secretive", "self-justifying"],
+    "goals": ["prove sanity", "rid himself of the old man's eye", "hide the crime"],
+    "voice": "urgent, defensive, precise, and increasingly frantic"
+  },
+  {
+    "id": "old_man",
+    "name": "Old Man",
+    "role": "victim",
+    "traits": ["trusting", "vulnerable", "fearful"],
+    "goals": ["rest safely", "understand the disturbance in his room"],
+    "voice": "quiet, startled, and afraid"
+  },
+  {
+    "id": "police_officer",
+    "name": "Police Officer",
+    "role": "investigator",
+    "traits": ["civil", "observant", "methodical"],
+    "goals": ["investigate the reported shriek", "search the house", "judge the narrator's explanation"],
+    "voice": "calm, formal, and probing"
+  },
+  {
+    "id": "neighbor",
+    "name": "Neighbor",
+    "role": "witness",
+    "traits": ["alert", "concerned", "suspicious"],
+    "goals": ["report the shriek", "prompt authorities to investigate"],
+    "voice": "concerned, plainspoken, and cautious"
+  }
+]

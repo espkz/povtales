@@ -60,3 +60,5 @@ Lists major story events in order:
   }
 ]
 ```
+
+Use playable character ids in `known_by`. These events are used to decide what a selected character can personally know at a selected story moment.

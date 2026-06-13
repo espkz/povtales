@@ -1,0 +1,65 @@
+[
+  {
+    "id": "mother_craves_rapunzel",
+    "order": 1,
+    "summary": "Rapunzel's mother longs for the rapunzel lettuce growing in the enchantress's garden.",
+    "characters_present": ["father"],
+    "known_by": ["father"]
+  },
+  {
+    "id": "father_bargains_child",
+    "order": 2,
+    "summary": "The enchantress catches Rapunzel's father stealing lettuce and demands the unborn child in exchange.",
+    "characters_present": ["father", "enchantress"],
+    "known_by": ["father", "enchantress"]
+  },
+  {
+    "id": "enchantress_takes_rapunzel",
+    "order": 3,
+    "summary": "When the baby is born, the enchantress names her Rapunzel and takes her away.",
+    "characters_present": ["rapunzel", "enchantress", "father"],
+    "known_by": ["enchantress", "father"]
+  },
+  {
+    "id": "rapunzel_locked_in_tower",
+    "order": 4,
+    "summary": "At twelve years old, Rapunzel is locked in a tower with no stairs or door.",
+    "characters_present": ["rapunzel", "enchantress"],
+    "known_by": ["rapunzel", "enchantress"]
+  },
+  {
+    "id": "prince_hears_song",
+    "order": 5,
+    "summary": "A Prince hears Rapunzel singing from the tower and returns daily to listen.",
+    "characters_present": ["rapunzel", "prince"],
+    "known_by": ["prince"]
+  },
+  {
+    "id": "prince_climbs_hair",
+    "order": 6,
+    "summary": "The Prince learns the enchantress's call, climbs Rapunzel's hair, and asks to marry her.",
+    "characters_present": ["rapunzel", "prince"],
+    "known_by": ["rapunzel", "prince"]
+  },
+  {
+    "id": "enchantress_discovers_prince",
+    "order": 7,
+    "summary": "Rapunzel accidentally reveals the Prince's visits, and the enchantress cuts off her hair.",
+    "characters_present": ["rapunzel", "enchantress"],
+    "known_by": ["rapunzel", "enchantress"]
+  },
+  {
+    "id": "prince_blinded",
+    "order": 8,
+    "summary": "The enchantress tricks the Prince with Rapunzel's cut braids, and he falls from the tower into thorns that blind him.",
+    "characters_present": ["prince", "enchantress"],
+    "known_by": ["prince", "enchantress"]
+  },
+  {
+    "id": "rapunzel_reunites_with_prince",
+    "order": 9,
+    "summary": "After years of wandering, the Prince finds Rapunzel in the wilderness, her tears heal his eyes, and they return to his kingdom.",
+    "characters_present": ["rapunzel", "prince"],
+    "known_by": ["rapunzel", "prince"]
+  }
+]
