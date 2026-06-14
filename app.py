@@ -39,11 +39,11 @@ with st.sidebar:
     age = st.number_input("Reader age", min_value=3, max_value=18, value=8, step=1)
     model = st.selectbox("Model", MODEL_OPTIONS, index=0)
 
-    validate_responses = True
+    validate_responses = False
     show_grounding = False
 
     with st.expander("Advanced"):
-        validate_responses = st.checkbox("Validate responses", value=True)
+        validate_responses = st.checkbox("Validate responses", value=False)
         show_grounding = st.checkbox("Show grounding details", value=False)
 
     if st.button("Start over", use_container_width=True):
