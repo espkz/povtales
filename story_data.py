@@ -127,22 +127,6 @@ def get_character_profile(story: StoryPackage, character_name: str) -> Character
     raise ValueError(f"{character_name} is not available for {story.title}")
 
 
-def get_timeline_labels(story: StoryPackage) -> list[str]:
-    return [format_timeline_label(event) for event in story.timeline]
-
-
-def format_timeline_label(event: TimelineEvent) -> str:
-    return f"{event.order}. {event.summary}"
-
-
-def get_timeline_event_by_label(story: StoryPackage, label: str) -> TimelineEvent:
-    for event in story.timeline:
-        if format_timeline_label(event) == label:
-            return event
-
-    raise ValueError(f"{label} is not a timeline event for {story.title}")
-
-
 def get_timeline_event(story: StoryPackage, event_id: str) -> TimelineEvent:
     for event in story.timeline:
         if event.id == event_id:
@@ -176,32 +160,6 @@ def get_events_known_by(
         for event in get_events_until(story, event_id)
         if character_id in event.known_by
     ]
-
-
-def get_allowed_event_ids(
-    story: StoryPackage,
-    character_id: str,
-    event_id: str | None,
-    spoiler_mode: str,
-) -> list[str]:
-    if spoiler_mode == "No spoilers":
-        events = get_events_known_by(story, character_id, event_id)
-    elif spoiler_mode == "Spoilers up to selected moment":
-        events = get_events_until(story, event_id)
-    elif spoiler_mode == "Full-story spoilers":
-        events = get_events_until(story, None)
-    else:
-        raise ValueError(f"Unknown spoiler mode: {spoiler_mode}")
-
-    return [event.id for event in events]
-
-
-def get_passages_for_events(
-    story: StoryPackage,
-    event_ids: list[str],
-) -> list[SourcePassage]:
-    allowed = set(event_ids)
-    return [passage for passage in story.passages if passage.event_id in allowed]
 
 
 def format_timeline_events(events: list[TimelineEvent]) -> str:

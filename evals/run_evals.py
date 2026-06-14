@@ -9,10 +9,8 @@ sys.path.insert(0, str(REPO_DIR))
 
 from story_data import (
     STORY_PACKAGES,
-    get_allowed_event_ids,
     get_character_profile,
     get_events_known_by,
-    get_passages_for_events,
     get_timeline_event,
 )
 
@@ -24,7 +22,7 @@ DEFAULT_RESULTS_DIR = BASE_DIR / "results"
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Run deterministic POVTales timeline and spoiler evaluations."
+        description="Run deterministic POVTales story package evaluations."
     )
     parser.add_argument(
         "--cases",
@@ -72,22 +70,10 @@ def evaluate_case(case):
             case["timeline_event_id"],
         )
     ]
-    actual_allowed_event_ids = [
-        event_id
-        for event_id in get_allowed_event_ids(
-            story,
-            character.id,
-            case["timeline_event_id"],
-            case["spoiler_mode"],
-        )
-    ]
     actual_source_event_ids = sorted(
         {
             passage.event_id
-            for passage in get_passages_for_events(
-                story,
-                actual_allowed_event_ids,
-            )
+            for passage in story.passages
         }
     )
 
@@ -97,20 +83,10 @@ def evaluate_case(case):
             actual_known_event_ids,
             case.get("expected_known_event_ids", []),
         ),
-        check_required(
-            "allowed",
-            actual_allowed_event_ids,
-            case.get("expected_allowed_event_ids", []),
-        ),
         check_forbidden(
             "known",
             actual_known_event_ids,
             case.get("forbidden_known_event_ids", []),
-        ),
-        check_forbidden(
-            "allowed",
-            actual_allowed_event_ids,
-            case.get("forbidden_allowed_event_ids", []),
         ),
         check_required(
             "source",
@@ -120,12 +96,8 @@ def evaluate_case(case):
         check_forbidden(
             "source",
             actual_source_event_ids,
-            case.get(
-                "forbidden_source_event_ids",
-                case.get("forbidden_allowed_event_ids", []),
-            ),
+            case.get("forbidden_source_event_ids", []),
         ),
-        check_source_subset(actual_source_event_ids, actual_allowed_event_ids),
     ]
     failures = [failure for check in checks for failure in check]
 
@@ -134,12 +106,10 @@ def evaluate_case(case):
         "story": case["story"],
         "character": case["character"],
         "timeline_event_id": case["timeline_event_id"],
-        "spoiler_mode": case["spoiler_mode"],
         "prompt": case["prompt"],
         "passed": not failures,
         "failures": failures,
         "actual_known_event_ids": actual_known_event_ids,
-        "actual_allowed_event_ids": actual_allowed_event_ids,
         "actual_source_event_ids": actual_source_event_ids,
     }
 
@@ -165,18 +135,6 @@ def check_forbidden(section, actual_event_ids, forbidden_event_ids):
     return [
         f"{section} events included forbidden event: {event_id}"
         for event_id in present
-    ]
-
-
-def check_source_subset(source_event_ids, allowed_event_ids):
-    disallowed = [
-        event_id
-        for event_id in source_event_ids
-        if event_id not in allowed_event_ids
-    ]
-    return [
-        f"source events included event outside allowed canon: {event_id}"
-        for event_id in disallowed
     ]
 
 

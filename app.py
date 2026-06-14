@@ -3,10 +3,8 @@ import streamlit as st
 from story_data import (
     STORY_PACKAGES,
     get_character_names,
-    get_timeline_event_by_label,
-    get_timeline_labels,
 )
-from utils import SPOILER_MODES, StoryChatbot
+from utils import StoryChatbot
 
 
 MODEL_OPTIONS = ["gpt-4o-mini", "gpt-4o", "gpt-5-nano", "gpt-5-mini"]
@@ -28,22 +26,20 @@ with st.sidebar:
     st.header("Story Setup")
     story = st.selectbox("Story", list(STORY_PACKAGES.keys()))
     selected_story = STORY_PACKAGES[story]
-    timeline_labels = get_timeline_labels(selected_story)
-    if not timeline_labels:
+    if not selected_story.timeline:
         st.error(f"{story} does not have any timeline events.")
         st.stop()
 
     character = st.selectbox("Character", get_character_names(selected_story))
-    timeline_label = st.selectbox(
-        "Story moment",
-        timeline_labels,
-        index=len(timeline_labels) - 1,
-    )
-    spoiler_mode = st.selectbox("Spoiler setting", SPOILER_MODES, index=0)
     age = st.number_input("Reader age", min_value=3, max_value=18, value=8, step=1)
     model = st.selectbox("Model", MODEL_OPTIONS, index=0)
-    validate_responses = st.checkbox("Validate responses", value=True)
-    show_grounding = st.checkbox("Show grounding details", value=False)
+
+    validate_responses = True
+    show_grounding = False
+
+    with st.expander("Advanced"):
+        validate_responses = st.checkbox("Validate responses", value=True)
+        show_grounding = st.checkbox("Show grounding details", value=False)
 
     if st.button("Start over", use_container_width=True):
         st.session_state.pop("chatbot", None)
@@ -54,12 +50,9 @@ if not api_key:
     st.warning("Please enter your OpenAI API key to start chatting.")
     st.stop()
 
-timeline_event = get_timeline_event_by_label(selected_story, timeline_label)
 chatbot_config = {
     "story": story,
     "role": character,
-    "timeline_event_id": timeline_event.id,
-    "spoiler_mode": spoiler_mode,
     "age": age,
     "model": model,
     "api_key": api_key,
@@ -76,10 +69,7 @@ if st.session_state.get("chatbot_config") != chatbot_config:
 
 chatbot = st.session_state.chatbot
 
-st.info(
-    f"You are speaking with **{character}** from **{story}** at "
-    f"**moment {timeline_event.order}** with **{spoiler_mode.lower()}**."
-)
+st.info(f"You are speaking with **{character}** from **{story}**.")
 
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
@@ -96,7 +86,7 @@ if prompt := st.chat_input(f"Speak to {character}..."):
         st.markdown(response)
         if show_grounding:
             with st.expander("Grounding details"):
-                st.markdown("**Allowed Context**")
+                st.markdown("**Source Context**")
                 st.code(chatbot.last_context or "No context recorded.")
                 if chatbot.last_validation is not None:
                     st.markdown("**Validation**")

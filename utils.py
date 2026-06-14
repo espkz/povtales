@@ -14,26 +14,13 @@ from story_data import (
     STORY_PACKAGES,
     format_character_profile,
     format_timeline_events,
-    get_allowed_event_ids,
     get_events_known_by,
     get_events_until,
     get_character_profile,
-    get_passages_for_events,
-    get_timeline_event,
 )
 
 
 BASE_DIR = Path(__file__).resolve().parent
-
-
-FULL_STORY_SPOILERS = "Full-story spoilers"
-NO_SPOILERS = "No spoilers"
-SPOILERS_UP_TO_SELECTED_MOMENT = "Spoilers up to selected moment"
-SPOILER_MODES = [
-    NO_SPOILERS,
-    SPOILERS_UP_TO_SELECTED_MOMENT,
-    FULL_STORY_SPOILERS,
-]
 
 
 @dataclass
@@ -53,8 +40,6 @@ class StoryChatbot:
         self,
         story,
         role,
-        timeline_event_id,
-        spoiler_mode,
         age,
         model,
         api_key=None,
@@ -65,15 +50,9 @@ class StoryChatbot:
 
         self.story_package = STORY_PACKAGES[story]
         self.character_profile = get_character_profile(self.story_package, role)
-        self.timeline_event = get_timeline_event(
-            self.story_package,
-            timeline_event_id,
-        )
 
         self.story = story
         self.role = role
-        self.timeline_event_id = timeline_event_id
-        self.spoiler_mode = spoiler_mode
         self.age = age
         self.model = model
         self.api_key = api_key
@@ -82,7 +61,7 @@ class StoryChatbot:
         self.history = []
         self.last_context = ""
         self.last_validation = None
-        self.timeline_context = self.build_timeline_context()
+        self.story_context = self.build_story_context()
 
         self.llm = ChatOpenAI(model=model, api_key=api_key, temperature=0.7)
         self.validator_llm = None
@@ -93,7 +72,7 @@ class StoryChatbot:
                 MessagesPlaceholder(variable_name="history"),
                 (
                     "system",
-                    "Allowed story context. Use this as canon and do not contradict it:\n{context}",
+                    "Source context. Use this as canon and do not contradict it:\n{context}",
                 ),
                 ("user", "{input}"),
             ]
@@ -104,18 +83,17 @@ class StoryChatbot:
         self.revision_chain = None
 
     def get_context(self, user_input):
-        allowed_event_ids = self.get_allowed_event_ids()
-        if not allowed_event_ids:
+        if not self.story_package.passages:
             return (
-                "No raw source passages are available for this spoiler setting. "
-                "Use the timeline and spoiler boundary from the system instructions."
+                "No raw source passages are available. Use the story context from "
+                "the system instructions."
             )
 
-        retriever = self.get_retriever(allowed_event_ids)
+        retriever = self.get_retriever()
         if retriever is None:
             return (
-                "No tagged source passages matched the allowed timeline events. "
-                "Use the timeline and spoiler boundary from the system instructions."
+                "No source passages are available. Use the story context from the "
+                "system instructions."
             )
 
         docs = retriever.invoke(user_input)
@@ -123,22 +101,13 @@ class StoryChatbot:
             format_retrieved_passage(doc)
             for doc in docs
         )
-        return "Relevant allowed source passages:\n" + source_context
+        return "Relevant source passages:\n" + source_context
 
-    def get_allowed_event_ids(self):
-        return get_allowed_event_ids(
-            self.story_package,
-            self.character_profile.id,
-            self.timeline_event_id,
-            self.spoiler_mode,
-        )
-
-    def get_retriever(self, allowed_event_ids):
-        cache_key = tuple(allowed_event_ids)
+    def get_retriever(self):
+        cache_key = self.story_package.id
         if cache_key not in self.retrievers:
             db = create_story_db(
                 self.story_package.id,
-                cache_key,
                 self.api_key,
             )
             self.retrievers[cache_key] = (
@@ -157,57 +126,27 @@ class StoryChatbot:
             story=self.story,
             age=self.age,
             character_profile=format_character_profile(self.character_profile),
-            timeline_context=self.get_timeline_context(),
-            spoiler_mode=self.spoiler_mode,
+            story_context=self.get_story_context(),
         )
 
-    def get_timeline_context(self):
-        return self.timeline_context
+    def get_story_context(self):
+        return self.story_context
 
-    def build_timeline_context(self):
+    def build_story_context(self):
         known_events = get_events_known_by(
             self.story_package,
             self.character_profile.id,
-            self.timeline_event_id,
-        )
-        events_until_moment = get_events_until(
-            self.story_package,
-            self.timeline_event_id,
+            None,
         )
         full_story_events = get_events_until(self.story_package, None)
 
-        if self.spoiler_mode == NO_SPOILERS:
-            allowed_events = known_events
-            spoiler_rule = (
-                "Do not reveal events outside the character-known events. "
-                "If asked about unknown or future events, say you do not know yet."
-            )
-        elif self.spoiler_mode == SPOILERS_UP_TO_SELECTED_MOMENT:
-            allowed_events = events_until_moment
-            spoiler_rule = (
-                "You may discuss canon events up to the selected moment, but keep "
-                "your personal point of view separate from facts this character "
-                "would not personally know."
-            )
-        else:
-            allowed_events = full_story_events
-            spoiler_rule = (
-                "Full-story spoilers are allowed when the reader asks. When "
-                "roleplaying, still distinguish what the character knows at the "
-                "selected moment from full-story canon."
-            )
-
         return "\n".join(
             [
-                f"Current story moment: {self.timeline_event.order}. {self.timeline_event.summary}",
-                f"Spoiler setting: {self.spoiler_mode}",
-                f"Spoiler rule: {spoiler_rule}",
+                "Full story timeline:",
+                format_timeline_events(full_story_events),
                 "",
-                "Events this character personally knows at this moment:",
+                "Events this character personally knows or experiences:",
                 format_timeline_events(known_events),
-                "",
-                "Allowed canon events for this response:",
-                format_timeline_events(allowed_events),
             ]
         )
 
@@ -270,21 +209,21 @@ class StoryChatbot:
             "story": self.story,
             "role": self.role,
             "age": self.age,
-            "timeline_context": self.get_timeline_context(),
-            "allowed_context": context,
+            "story_context": self.get_story_context(),
+            "source_context": context,
             "user_input": user_input,
             "response": response,
         }
 
 
 @lru_cache(maxsize=32)
-def create_story_db(story_id, allowed_event_ids, api_key=None):
+def create_story_db(story_id, api_key=None):
     story = next(
         story
         for story in STORY_PACKAGES.values()
         if story.id == story_id
     )
-    passages = get_passages_for_events(story, list(allowed_event_ids))
+    passages = story.passages
     if not passages:
         return None
 
@@ -323,15 +262,15 @@ def build_validation_prompt():
                 "system",
                 "\n".join(
                     [
-                        "You are a strict canon and spoiler validator for POVTales.",
+                        "You are a strict canon validator for POVTales.",
                         "Decide whether the draft response is safe to show.",
-                        "Use only the timeline boundary and allowed context as canon.",
-                        "Check for canon contradictions, spoiler leaks, point-of-view violations, and age/tone problems.",
+                        "Use only the story context and source passages as canon.",
+                        "Check for canon contradictions, point-of-view problems, and age/tone problems.",
                         "Return JSON only with this shape:",
                         '{"passed": true, "issues": []}',
                         "If it fails, use this shape:",
-                        '{"passed": false, "issues": [{"type": "spoiler", "description": "short reason"}]}',
-                        "Issue types must be one of: canon, spoiler, pov, age, tone.",
+                        '{"passed": false, "issues": [{"type": "canon", "description": "short reason"}]}',
+                        "Issue types must be one of: canon, pov, age, tone.",
                     ]
                 ),
             ),
@@ -342,8 +281,8 @@ def build_validation_prompt():
                         "Story: {story}",
                         "Character: {role}",
                         "Reader age: {age}",
-                        "Timeline and spoiler boundary:\n{timeline_context}",
-                        "Allowed context:\n{allowed_context}",
+                        "Story context:\n{story_context}",
+                        "Source passages:\n{source_context}",
                         "User message:\n{user_input}",
                         "Draft response:\n{response}",
                     ]
@@ -362,8 +301,7 @@ def build_revision_prompt():
                     [
                         "You revise character responses for POVTales.",
                         "Keep the same character voice, but fix every listed validation issue.",
-                        "Use only the timeline boundary and allowed context as canon.",
-                        "Do not reveal disallowed future events or private knowledge.",
+                        "Use only the story context and source passages as canon.",
                         "Keep the response age-appropriate for the reader.",
                         "Return only the revised character response.",
                     ]
@@ -376,8 +314,8 @@ def build_revision_prompt():
                         "Story: {story}",
                         "Character: {role}",
                         "Reader age: {age}",
-                        "Timeline and spoiler boundary:\n{timeline_context}",
-                        "Allowed context:\n{allowed_context}",
+                        "Story context:\n{story_context}",
+                        "Source passages:\n{source_context}",
                         "User message:\n{user_input}",
                         "Validation issues:\n{issues}",
                         "Draft response:\n{response}",

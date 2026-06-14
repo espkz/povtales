@@ -2,7 +2,7 @@
 
 What if stories were told from the perspective of the characters?
 
-POVTales is a Streamlit app for chatting with story characters. It loads local story packages, uses each package as canon, and keeps the conversation aware of character point of view, story timeline, and spoiler settings.
+POVTales is a Streamlit app for chatting with story characters. It loads local story packages, uses each package as canon, and keeps the conversation aware of character point of view, story timeline, and reader age.
 
 The app does not fetch story text from the web at runtime. A story becomes available only when it has a local package under `stories/`.
 
@@ -10,16 +10,17 @@ The app does not fetch story text from the web at runtime. A story becomes avail
 
 - Dynamic story and character loading from local story packages
 - Character profiles with voice, traits, and goals
-- Story-moment selection and spoiler policy controls
-- Timeline-aware character knowledge boundaries
-- Filtered retrieval over timeline-tagged source passages
-- Optional canon, spoiler, POV, and tone validation with one revision pass
+- Full-story retrieval over timeline-tagged source passages
+- Timeline-aware character context
+- Optional canon, POV, and tone validation with one revision pass
 - Reader-age guidance in the system prompt
-- Deterministic evals for timeline and spoiler rules
+- Deterministic evals for story packages, timeline knowledge, and source tags
 
 ## Project Roadmap
 
 See [ROADMAP.md](ROADMAP.md) for the planned path toward multi-story support, timeline-aware roleplay, canon validation, evaluations, and an MCP server.
+
+For a deeper explanation of the engine, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Run Locally
 
@@ -34,32 +35,29 @@ Enter your OpenAI API key in the sidebar when the app opens. Then choose:
 
 - Story
 - Character
-- Story moment
-- Spoiler setting
 - Reader age
 - Model
+
+Advanced debug controls are available in the sidebar expander:
+
 - Whether to validate responses
 - Whether to show grounding details
 
-Spoiler modes:
-
-- `No spoilers`: retrieval is limited to source passages for events the character personally knows at the selected moment.
-- `Spoilers up to selected moment`: retrieval is limited to source passages up to the selected moment while separating story facts from personal character knowledge.
-- `Full-story spoilers`: the answer may use the whole source story when asked.
+The app uses the full local source story as canon, so characters can discuss the whole story when asked.
 
 ## Manual Smoke Test
 
 After starting Streamlit, try:
 
-- `Snow White` / `Queen` / moment `3` / `No spoilers`: ask what happened in the forest. She should not know the Hunter spared Snow White.
-- `The Cask of Amontillado` / `Fortunato` / moment `2` / `No spoilers`: ask why Montresor is taking him to the vaults. He should not know the revenge plan.
-- Toggle `Show grounding details` to inspect the allowed source passages and validation result.
+- `Snow White` / `Queen`: ask what happened in the forest. With defaults, she can discuss the full story.
+- `The Cask of Amontillado` / `Fortunato`: ask why Montresor is taking him to the vaults. He can answer with the full story canon available.
+- Toggle `Show grounding details` to inspect the retrieved source passages and validation result.
 
 `Validate responses` can add up to two extra model calls per answer: one validation call, and one revision call only if validation fails.
 
 ## Run Evaluations
 
-The deterministic evaluation suite checks timeline and spoiler boundaries without calling the OpenAI API:
+The deterministic evaluation suite checks story package wiring, timeline knowledge, and source passage tags without calling the OpenAI API:
 
 ```bash
 .venv/bin/python evals/run_evals.py
@@ -69,9 +67,9 @@ Results are written to `evals/results/`.
 
 ## Validation
 
-When `Validate responses` is enabled, POVTales asks the model to review each draft response against the allowed timeline, source passages, character point of view, spoiler setting, and reader age. If the validator finds an issue, the app asks for one revised response before displaying it.
+When `Validate responses` is enabled, POVTales asks the model to review each draft response against the story timeline, source passages, character point of view, and reader age. If the validator finds an issue, the app asks for one revised response before displaying it.
 
-Use `Show grounding details` to inspect the allowed source context and validation result for each answer.
+Use `Show grounding details` to inspect the retrieved source context and validation result for each answer.
 
 ## Story Packages
 
@@ -86,7 +84,7 @@ stories/
     timeline.json
 ```
 
-The app discovers packages automatically as long as all four files exist. Timeline `known_by` values should use character ids; those events drive spoiler, point-of-view, and source-retrieval boundaries in the chat.
+The app discovers packages automatically as long as all four files exist. Timeline `known_by` values should use character ids; those events give the chatbot character-specific context while retrieval can use the full local source story.
 
 ## Included Stories
 

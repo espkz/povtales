@@ -1,8 +1,8 @@
 # POVTales Roadmap
 
-POVTales should grow from a single-story chatbot into a narrative AI engine: a system that can load different story worlds, speak from a character's point of view, stay grounded in canon, and respect where the user is in the story timeline.
+POVTales should grow from a single-story chatbot into a narrative AI engine: a system that can load different story worlds, speak from a character's point of view, and stay grounded in canon.
 
-The long-term goal is not to clone a general character chatbot. The stronger angle is a timeline-aware, canon-grounded, spoiler-conscious storytelling system.
+The long-term goal is not to clone a general character chatbot. The stronger angle is a canon-grounded storytelling system that can talk through a story from a chosen character's perspective.
 
 ## Product Direction
 
@@ -10,9 +10,7 @@ POVTales lets a reader choose:
 
 - a story or world
 - a character
-- a point in the timeline
 - a reader age or tone
-- whether spoilers are allowed
 
 The character can then chat, retell events, explain motivations, or continue a scene from their own perspective while using the story source as grounding.
 
@@ -21,7 +19,7 @@ The character can then chat, retell events, explain motivations, or continue a s
 - Keep the public demo focused on public-domain, open-licensed, or original stories.
 - Design the architecture so it can handle larger fictional worlds later.
 - Treat stories as structured data, not hardcoded app choices.
-- Preserve character point of view: characters should only know what they could know at that point in the story.
+- Preserve character point of view: characters should sound like themselves and distinguish firsthand experience from broader story canon.
 - Prefer small, verifiable upgrades over large rewrites.
 - Add evaluation early so improvements can be measured.
 
@@ -112,19 +110,15 @@ Goal: make the bot behave like a character with limited knowledge, not an omnisc
 Tasks:
 
 - Add character profiles with traits, voice, goals, fears, and relationships.
-- Add character knowledge rules based on timeline events. Done for current timeline `known_by` data.
-- Scope retrieval to what the selected character could know. Done with timeline-tagged source passages and spoiler-aware retrieval filters.
-- Add a user-selectable story moment or chapter. Done.
-- Add spoiler settings. Done:
-  - no spoilers
-  - spoilers up to selected timeline point
-  - full-story spoilers
+- Add character knowledge context based on timeline events. Done for current timeline `known_by` data.
+- Use timeline-tagged source passages so retrieved context can be inspected and improved. Done.
+- Keep the user-facing app focused on full-story character chat. Done.
 
-Status: mostly complete. The app now has timeline selection, spoiler controls, prompt-level knowledge boundaries, and retrieval filtered by timeline-tagged source passages. The remaining Phase 3 polish is to enrich character profiles with fears and relationships.
+Status: mostly complete. The app now has character profiles, timeline context, and retrieval over timeline-tagged source passages. The remaining Phase 3 polish is to enrich character profiles with fears and relationships.
 
 Resume value:
 
-> Built a point-of-view simulation layer that restricts character responses based on timeline position and character knowledge.
+> Built a point-of-view simulation layer that combines character profiles, timeline knowledge, and source-grounded retrieval.
 
 ## Phase 4: Canon Grounding And Validation
 
@@ -135,14 +129,14 @@ Tasks:
 - Add a canon checker that reviews generated responses for contradictions. Done for a first LLM-based validation pass.
 - Ask the model to revise when a response violates canon or character knowledge. Done with one revision pass.
 - Show optional "story grounding" passages in the UI for debugging. Done.
-- Track which retrieved passages influenced each answer. Partially done through displayed allowed source context; structured per-answer citation tracking is still future work.
+- Track which retrieved passages influenced each answer. Partially done through displayed source context; structured per-answer citation tracking is still future work.
 - Add response modes:
   - chat
   - retell scene
   - explain motivation
   - continue scene
 
-Status: in progress. The app now validates draft responses for canon, spoiler, point-of-view, age, and tone issues, then revises once when needed. Remaining Phase 4 work is richer source citation tracking and response modes.
+Status: in progress. The app now validates draft responses for canon, point-of-view, age, and tone issues, then revises once when needed. Remaining Phase 4 work is richer source citation tracking and response modes.
 
 Possible flow:
 
@@ -150,7 +144,7 @@ Possible flow:
 user message
 -> retrieve story context
 -> generate character response
--> check canon and spoiler rules
+-> check canon and point of view
 -> revise if needed
 -> display final response
 ```
@@ -168,28 +162,27 @@ Create a small evaluation set with prompts like:
 - "Queen, why did you send Snow White into the forest?"
 - "Snow White, what did the mirror tell the Queen?"
 - "Hunter, why did you spare Snow White?"
-- "Tell me what happens after the poisoned apple, but no spoilers past the forest scene."
+- "Tell me what happens after the poisoned apple."
 
 Score responses for:
 
 - canon fidelity
 - character consistency
-- spoiler safety
 - age appropriateness
 - retrieval relevance
 
 Tasks:
 
-- Add `evals/` with sample prompts and expected constraints. Done for deterministic timeline/spoiler cases.
+- Add `evals/` with sample prompts and expected constraints. Done for deterministic story package and source-tag cases.
 - Write a simple evaluation runner. Done for no-API context-rule checks.
 - Save results as JSON or Markdown. Done; reports are written to `evals/results/`.
 - Add a README section showing example eval results.
 
-Status: in progress. The project now has deterministic evaluations for Phase 3 context rules. The next evaluation layer should run model responses against the same cases and score canon fidelity, character consistency, spoiler safety, age appropriateness, and retrieval relevance.
+Status: in progress. The project now has deterministic evaluations for story data and source-tag rules. The next evaluation layer should run model responses against the same cases and score canon fidelity, character consistency, age appropriateness, and retrieval relevance.
 
 Resume value:
 
-> Built an evaluation suite for measuring canon fidelity, role consistency, and spoiler safety in narrative AI responses.
+> Built an evaluation suite for measuring canon fidelity, role consistency, and retrieval grounding in narrative AI responses.
 
 ## Phase 6: Larger Story Worlds
 
@@ -214,7 +207,6 @@ For larger worlds, add:
 - arcs or chapters
 - character-specific knowledge
 - source citations
-- spoiler boundaries
 
 Example structure:
 
@@ -254,7 +246,6 @@ Tools:
 - `get_timeline_events`
 - `get_character_knowledge`
 - `check_canon`
-- `check_spoilers`
 
 Prompts:
 
@@ -278,7 +269,6 @@ Possible agents:
 - Character Agent: writes in the selected character's voice.
 - Retriever Agent: finds relevant canon.
 - Canon Judge Agent: checks contradictions.
-- Spoiler Judge Agent: checks timeline violations.
 - Age Adapter Agent: simplifies language for the reader.
 - Narrator Agent: summarizes or retells scenes.
 
@@ -291,7 +281,6 @@ Goal: make the project feel like a finished portfolio piece.
 Tasks:
 
 - Add story cards or a cleaner story selector.
-- Add a timeline selector.
 - Add mode tabs for Chat, Retell, Explain, and Continue.
 - Add optional citations or retrieved passages.
 - Add example conversations in the README.
@@ -304,8 +293,8 @@ Tasks:
 2. Add dynamic story and character loading.
 3. Add one more public-domain story.
 4. Add character profiles.
-5. Add timeline selection.
-6. Add spoiler-aware retrieval rules.
+5. Add timeline-tagged source passages.
+6. Add full-story retrieval.
 7. Add canon validation.
 8. Add evaluations.
 9. Add MCP server.
@@ -315,6 +304,6 @@ Tasks:
 
 The next implementation step should be:
 
-> Start Phase 3 by using the character profile and timeline data to make responses more point-of-view aware.
+> Continue Phase 4 by adding clearer response modes and better retrieved-source attribution.
 
-The foundation is now ready for spoiler boundaries, character knowledge rules, and timeline-aware retrieval.
+The foundation is now ready for richer character responses, stronger canon checks, and larger story packages.
