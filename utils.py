@@ -294,9 +294,9 @@ def build_validation_prompt():
                         "Allow character-grounded imagination for hypotheticals, motives, feelings, and possibilities.",
                         "Do not fail a response just because it speculates, as long as speculation is not presented as confirmed canon.",
                         "Return JSON only with this shape:",
-                        '{"passed": true, "issues": []}',
+                        '{{"passed": true, "issues": []}}',
                         "If it fails, use this shape:",
-                        '{"passed": false, "issues": [{"type": "canon", "description": "short reason"}]}',
+                        '{{"passed": false, "issues": [{{"type": "canon", "description": "short reason"}}]}}',
                         "Issue types must be one of: canon, pov, age, tone.",
                     ]
                 ),
