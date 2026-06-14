@@ -266,6 +266,8 @@ def build_validation_prompt():
                         "Decide whether the draft response is safe to show.",
                         "Use only the story context and source passages as canon.",
                         "Check for canon contradictions, point-of-view problems, and age/tone problems.",
+                        "Allow character-grounded imagination for hypotheticals, motives, feelings, and possibilities.",
+                        "Do not fail a response just because it speculates, as long as speculation is not presented as confirmed canon.",
                         "Return JSON only with this shape:",
                         '{"passed": true, "issues": []}',
                         "If it fails, use this shape:",
@@ -302,6 +304,7 @@ def build_revision_prompt():
                         "You revise character responses for POVTales.",
                         "Keep the same character voice, but fix every listed validation issue.",
                         "Use only the story context and source passages as canon.",
+                        "Preserve character-grounded imagination when it does not contradict canon.",
                         "Keep the response age-appropriate for the reader.",
                         "Return only the revised character response.",
                     ]
