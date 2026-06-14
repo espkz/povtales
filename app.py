@@ -22,6 +22,7 @@ if not STORY_PACKAGES:
 with st.sidebar:
     st.header("API Key")
     api_key = st.text_input("OpenAI API key", type="password")
+    api_key = api_key.strip()
 
     st.header("Story Setup")
     story = st.selectbox("Story", list(STORY_PACKAGES.keys()))
@@ -63,7 +64,12 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if st.session_state.get("chatbot_config") != chatbot_config:
-    st.session_state.chatbot = StoryChatbot(**chatbot_config)
+    try:
+        st.session_state.chatbot = StoryChatbot(**chatbot_config)
+    except Exception as exc:
+        st.error("POVTales could not start the selected chat.")
+        st.exception(exc)
+        st.stop()
     st.session_state.chatbot_config = chatbot_config
     st.session_state.messages = []
 
