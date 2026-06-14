@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from functools import lru_cache
 import json
 from pathlib import Path
+import unicodedata
 
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
@@ -21,6 +22,28 @@ from story_data import (
 
 
 BASE_DIR = Path(__file__).resolve().parent
+
+
+def normalize_api_key(api_key):
+    if api_key is None:
+        return None
+
+    cleaned = str(api_key).strip().strip("\"'")
+    cleaned = "".join(
+        char
+        for char in cleaned
+        if not char.isspace() and unicodedata.category(char) != "Cf"
+    )
+
+    try:
+        cleaned.encode("ascii")
+    except UnicodeEncodeError as exc:
+        raise ValueError(
+            "The OpenAI API key contains a hidden or non-ASCII character. "
+            "Paste the key again as plain text."
+        ) from exc
+
+    return cleaned
 
 
 @dataclass
@@ -47,6 +70,8 @@ class StoryChatbot:
     ):
         if story not in STORY_PACKAGES:
             raise ValueError(f"Unknown story: {story}")
+
+        api_key = normalize_api_key(api_key)
 
         self.story_package = STORY_PACKAGES[story]
         self.character_profile = get_character_profile(self.story_package, role)

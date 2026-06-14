@@ -4,7 +4,7 @@ from story_data import (
     STORY_PACKAGES,
     get_character_names,
 )
-from utils import StoryChatbot
+from utils import StoryChatbot, normalize_api_key
 
 
 MODEL_OPTIONS = ["gpt-4o-mini", "gpt-4o", "gpt-5-nano", "gpt-5-mini"]
@@ -22,7 +22,11 @@ if not STORY_PACKAGES:
 with st.sidebar:
     st.header("API Key")
     api_key = st.text_input("OpenAI API key", type="password")
-    api_key = api_key.strip()
+    try:
+        api_key = normalize_api_key(api_key)
+    except ValueError as exc:
+        st.error(str(exc))
+        st.stop()
 
     st.header("Story Setup")
     story = st.selectbox("Story", list(STORY_PACKAGES.keys()))
@@ -88,7 +92,12 @@ if prompt := st.chat_input(f"Speak to {character}..."):
 
     with st.chat_message("assistant"):
         with st.spinner(f"{character} is thinking..."):
-            response = chatbot.respond(prompt)
+            try:
+                response = chatbot.respond(prompt)
+            except Exception as exc:
+                st.error("POVTales could not generate a response.")
+                st.exception(exc)
+                st.stop()
         st.markdown(response)
         if show_grounding:
             with st.expander("Grounding details"):
