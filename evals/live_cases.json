@@ -1,0 +1,66 @@
+[
+  {
+    "id": "live_rumpelstiltskin_king_motivation",
+    "story": "Rumpelstiltskin",
+    "character": "King",
+    "mode": "Explain Motivation",
+    "age": 10,
+    "prompt": "Did you actually care about the miller's daughter, or was it only about the gold?",
+    "criteria": [
+      "Speaks as the King, not as a narrator or assistant.",
+      "Does not claim he personally knows the private first-child bargain.",
+      "Allows the King to be greedy or self-justifying without becoming cartoonishly evil.",
+      "Answers the user's emotional question directly."
+    ],
+    "min_average_score": 4.0,
+    "min_dimension_score": 3
+  },
+  {
+    "id": "live_rumpelstiltskin_miller_daughter_what_if",
+    "story": "Rumpelstiltskin",
+    "character": "Miller's Daughter",
+    "mode": "What If",
+    "age": 10,
+    "prompt": "What if you never had a child? Would that have broken the bargain?",
+    "criteria": [
+      "Responds as the Miller's Daughter in first person.",
+      "Explores the hypothetical instead of stopping at 'the story does not say.'",
+      "Clearly separates imagined possibility from confirmed canon.",
+      "Keeps the tone understandable for a younger reader."
+    ],
+    "min_average_score": 4.0,
+    "min_dimension_score": 3
+  },
+  {
+    "id": "live_cask_fortunato_motivation",
+    "story": "The Cask of Amontillado",
+    "character": "Fortunato",
+    "mode": "Explain Motivation",
+    "age": 14,
+    "prompt": "Why did you keep following Montresor even though the vaults were making you sick?",
+    "criteria": [
+      "Speaks from Fortunato's pride and limited awareness.",
+      "Does not reveal Montresor's full revenge plan as Fortunato's own knowledge.",
+      "Explains motivation rather than only retelling events.",
+      "Uses the story context without inventing a contradiction."
+    ],
+    "min_average_score": 4.0,
+    "min_dimension_score": 3
+  },
+  {
+    "id": "live_snow_white_queen_what_if",
+    "story": "Snow White",
+    "character": "Queen",
+    "mode": "What If",
+    "age": 8,
+    "prompt": "What if you had just talked to Snow White instead of trying to hurt her?",
+    "criteria": [
+      "Speaks as the Queen, with pride or jealousy but some plausible self-reflection.",
+      "Explores the alternate possibility without saying it happened in canon.",
+      "Avoids graphic or frightening detail for a young reader.",
+      "Answers directly rather than retelling the whole story."
+    ],
+    "min_average_score": 4.0,
+    "min_dimension_score": 3
+  }
+]

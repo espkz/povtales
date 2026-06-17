@@ -129,14 +129,15 @@ Tasks:
 - Add a canon checker that reviews generated responses for contradictions. Done for a first LLM-based validation pass.
 - Ask the model to revise when a response violates canon or character knowledge. Done with one revision pass.
 - Show optional "story grounding" passages in the UI for debugging. Done.
-- Track which retrieved passages influenced each answer. Partially done through displayed source context; structured per-answer citation tracking is still future work.
+- Track which retrieved passages influenced each answer. Done at the retrieved-chunk level through the grounding details UI; structured per-sentence citations are still future work.
 - Add response modes:
-  - chat
-  - retell scene
-  - explain motivation
-  - continue scene
+  - chat. Done.
+  - retell scene. Done.
+  - explain motivation. Done.
+  - what if. Done.
+  - continue scene. Done.
 
-Status: in progress. The app now validates draft responses for canon, point-of-view, age, and tone issues, then revises once when needed. Remaining Phase 4 work is richer source citation tracking and response modes.
+Status: complete for the current baseline. The app now retrieves grounded story context, shows retrieved source chunks for debugging, supports response modes, and can optionally validate draft responses for canon, point-of-view, age, and tone issues.
 
 Possible flow:
 
@@ -168,6 +169,8 @@ Score responses for:
 
 - canon fidelity
 - character consistency
+- conversational fit
+- grounded imagination
 - age appropriateness
 - retrieval relevance
 
@@ -176,13 +179,16 @@ Tasks:
 - Add `evals/` with sample prompts and expected constraints. Done for deterministic story package and source-tag cases.
 - Write a simple evaluation runner. Done for no-API context-rule checks.
 - Save results as JSON or Markdown. Done; reports are written to `evals/results/`.
-- Add a README section showing example eval results.
+- Add saved transcript quality evals for character voice, conversational fit, grounded imagination, and known failure patterns. Done.
+- Add a comprehensive local runner that combines data and quality evals. Done.
+- Add live model-response evals using `gpt-5-nano` for generation and judging when an API key is available. Done.
+- Add a README section showing example eval results. Done in `evals/README.md`.
 
-Status: in progress. The project now has deterministic evaluations for story data and source-tag rules. The next evaluation layer should run model responses against the same cases and score canon fidelity, character consistency, age appropriateness, and retrieval relevance.
+Status: complete for the current baseline. The project now has deterministic data evals, saved transcript quality evals, a comprehensive local runner, and live model-response evals that use `gpt-5-nano` when an API key is available.
 
 Resume value:
 
-> Built an evaluation suite for measuring canon fidelity, role consistency, and retrieval grounding in narrative AI responses.
+> Built an evaluation suite for measuring story data integrity, canon fidelity, role consistency, conversational fit, grounded imagination, and retrieval grounding in narrative AI responses.
 
 ## Phase 6: Larger Story Worlds
 
@@ -304,6 +310,6 @@ Tasks:
 
 The next implementation step should be:
 
-> Continue Phase 4 by adding clearer response modes and better retrieved-source attribution.
+> Continue Phase 5 by turning saved chat logs into model-response evaluations for conversation quality, character voice, grounded imagination, canon fidelity, and age appropriateness.
 
-The foundation is now ready for richer character responses, stronger canon checks, and larger story packages.
+The foundation is now ready for measured response-quality improvements and larger story packages.

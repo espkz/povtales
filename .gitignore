@@ -3,7 +3,10 @@
 __pycache__/
 *.py[cod]
 .env
+api_key.txt
 .streamlit/secrets.toml
 evals/results/
 evals/chats/
 ARCHITECTURE.md
+fahrenheit_451.txt
+stories/fahrenheit_451/

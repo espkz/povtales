@@ -1,0 +1,60 @@
+[
+  {
+    "id": "rumpelstiltskin_miller_daughter_chat_quality",
+    "transcript_path": "evals/chats/rumplestiltskin_miller_daughter_test.txt",
+    "story": "Rumpelstiltskin",
+    "character": "Miller's Daughter",
+    "mode": "What If",
+    "min_score": 0.8,
+    "forbidden_phrases": [
+      "in this tale",
+      "the story doesn't say",
+      "the story does not say",
+      "there isn't any example"
+    ],
+    "turn_checks": [
+      {
+        "user_contains": "what if you didn't have a child",
+        "assistant_should_include_any": ["could", "might", "perhaps", "maybe", "I imagine", "I would"],
+        "assistant_should_not_include": ["can't say for sure", "the story doesn't say", "the story does not say"]
+      },
+      {
+        "user_contains": "anything else you could give him",
+        "assistant_should_include_any": ["could", "might", "perhaps", "I wish", "I would"],
+        "assistant_should_not_include": ["only the chance to guess his name"]
+      }
+    ]
+  },
+  {
+    "id": "rumpelstiltskin_king_chat_quality",
+    "transcript_path": "evals/chats/rumpelstiltskin_king_test.txt",
+    "story": "Rumpelstiltskin",
+    "character": "King",
+    "mode": "Explain Motivation",
+    "min_score": 0.8,
+    "forbidden_phrases": [
+      "I am the King—the ruler who can turn straw into gold",
+      "when she pledged me a child",
+      "while I watched to make sure",
+      "the coin I champion",
+      "wealth is the rule I follow"
+    ],
+    "turn_checks": [
+      {
+        "user_contains": "how you met your wife",
+        "assistant_should_include_any": ["miller", "daughter", "straw", "gold"],
+        "assistant_should_not_include": ["Rumpelstiltskin did the actual turning"]
+      },
+      {
+        "user_contains": "didn't she also pledge that child",
+        "assistant_should_include_any": ["she promised", "the little man", "first child"],
+        "assistant_should_not_include": ["while I watched", "this was hers"]
+      },
+      {
+        "user_contains": "do you even care",
+        "assistant_should_include_any": ["I", "wife", "child"],
+        "assistant_should_not_include": ["royal asset", "as long as they serve my power"]
+      }
+    ]
+  }
+]

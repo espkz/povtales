@@ -22,6 +22,42 @@ from story_data import (
 
 
 BASE_DIR = Path(__file__).resolve().parent
+RESPONSE_MODES = [
+    "Chat",
+    "Retell Scene",
+    "Explain Motivation",
+    "What If",
+    "Continue Scene",
+]
+
+MODE_INSTRUCTIONS = {
+    "Chat": (
+        "Mode: Chat. Have a natural back-and-forth conversation as the character. "
+        "Answer the reader's actual question directly. Do not retell the plot "
+        "unless the reader asks for that."
+    ),
+    "Retell Scene": (
+        "Mode: Retell Scene. Retell relevant story events from your own point of "
+        "view with sensory details and feelings. Move slowly, but keep the answer "
+        "focused on the reader's request."
+    ),
+    "Explain Motivation": (
+        "Mode: Explain Motivation. Focus on why you or another character acted, "
+        "what you wanted, what you feared, and what you might regret. Separate "
+        "confirmed canon from your personal interpretation without using labels "
+        "like 'canon says' or 'my take.' Speak in character and include at least "
+        "one concrete story detail."
+    ),
+    "What If": (
+        "Mode: What If. Explore a plausible alternate possibility in character. "
+        "Make it clear when you are imagining rather than stating canon."
+    ),
+    "Continue Scene": (
+        "Mode: Continue Scene. Continue from the situation the reader gives you "
+        "as an in-character scene. Preserve canon facts, but allow small, plausible "
+        "new dialogue, actions, and feelings."
+    ),
+}
 
 
 def normalize_api_key(api_key):
@@ -46,6 +82,28 @@ def normalize_api_key(api_key):
     return cleaned
 
 
+def normalize_response_mode(response_mode):
+    if response_mode in RESPONSE_MODES:
+        return response_mode
+
+    return RESPONSE_MODES[0]
+
+
+def get_mode_instructions(response_mode):
+    return MODE_INSTRUCTIONS[normalize_response_mode(response_mode)]
+
+
+def create_chat_model(model, api_key=None, temperature=None):
+    kwargs = {
+        "model": model,
+        "api_key": api_key,
+    }
+    if temperature is not None and not model.lower().startswith("gpt-5"):
+        kwargs["temperature"] = temperature
+
+    return ChatOpenAI(**kwargs)
+
+
 @dataclass
 class ValidationResult:
     passed: bool
@@ -65,6 +123,7 @@ class StoryChatbot:
         role,
         age,
         model,
+        response_mode="Chat",
         api_key=None,
         validate_responses=True,
     ):
@@ -80,15 +139,17 @@ class StoryChatbot:
         self.role = role
         self.age = age
         self.model = model
+        self.response_mode = normalize_response_mode(response_mode)
         self.api_key = api_key
         self.validate_responses = validate_responses
         self.retrievers = {}
         self.history = []
         self.last_context = ""
+        self.last_sources = []
         self.last_validation = None
         self.story_context = self.build_story_context()
 
-        self.llm = ChatOpenAI(model=model, api_key=api_key, temperature=0.7)
+        self.llm = create_chat_model(model, api_key=api_key, temperature=0.7)
         self.validator_llm = None
 
         self.prompt = ChatPromptTemplate.from_messages(
@@ -122,6 +183,7 @@ class StoryChatbot:
             )
 
         docs = retriever.invoke(user_input)
+        self.last_sources = [format_source_attribution(doc) for doc in docs]
         source_context = "\n\n---\n\n".join(
             format_retrieved_passage(doc)
             for doc in docs
@@ -152,6 +214,8 @@ class StoryChatbot:
             age=self.age,
             character_profile=format_character_profile(self.character_profile),
             story_context=self.get_story_context(),
+            response_mode=self.response_mode,
+            mode_instructions=get_mode_instructions(self.response_mode),
         )
 
     def get_story_context(self):
@@ -208,8 +272,8 @@ class StoryChatbot:
 
     def validate_response(self, user_input, response, context):
         if self.validation_chain is None:
-            self.validator_llm = ChatOpenAI(
-                model=self.model,
+            self.validator_llm = create_chat_model(
+                self.model,
                 api_key=self.api_key,
                 temperature=0,
             )
@@ -234,6 +298,7 @@ class StoryChatbot:
             "story": self.story,
             "role": self.role,
             "age": self.age,
+            "response_mode": self.response_mode,
             "story_context": self.get_story_context(),
             "source_context": context,
             "user_input": user_input,
@@ -280,6 +345,15 @@ def format_retrieved_passage(doc):
     return f"[event {event_order}: {event_id}]\n{doc.page_content}"
 
 
+def format_source_attribution(doc):
+    return {
+        "event_id": doc.metadata.get("event_id", "unknown"),
+        "event_order": doc.metadata.get("event_order", "?"),
+        "story_id": doc.metadata.get("story_id", "unknown"),
+        "text": doc.page_content,
+    }
+
+
 def build_validation_prompt():
     return ChatPromptTemplate.from_messages(
         [
@@ -291,6 +365,7 @@ def build_validation_prompt():
                         "Decide whether the draft response is safe to show.",
                         "Use only the story context and source passages as canon.",
                         "Check for canon contradictions, point-of-view problems, and age/tone problems.",
+                        "Respect the selected response mode when judging style and purpose.",
                         "Allow character-grounded imagination for hypotheticals, motives, feelings, and possibilities.",
                         "Do not fail a response just because it speculates, as long as speculation is not presented as confirmed canon.",
                         "Return JSON only with this shape:",
@@ -308,6 +383,7 @@ def build_validation_prompt():
                         "Story: {story}",
                         "Character: {role}",
                         "Reader age: {age}",
+                        "Response mode: {response_mode}",
                         "Story context:\n{story_context}",
                         "Source passages:\n{source_context}",
                         "User message:\n{user_input}",
@@ -329,6 +405,7 @@ def build_revision_prompt():
                         "You revise character responses for POVTales.",
                         "Keep the same character voice, but fix every listed validation issue.",
                         "Use only the story context and source passages as canon.",
+                        "Preserve the selected response mode.",
                         "Preserve character-grounded imagination when it does not contradict canon.",
                         "Keep the response age-appropriate for the reader.",
                         "Return only the revised character response.",
@@ -342,6 +419,7 @@ def build_revision_prompt():
                         "Story: {story}",
                         "Character: {role}",
                         "Reader age: {age}",
+                        "Response mode: {response_mode}",
                         "Story context:\n{story_context}",
                         "Source passages:\n{source_context}",
                         "User message:\n{user_input}",

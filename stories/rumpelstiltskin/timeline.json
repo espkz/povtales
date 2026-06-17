@@ -25,7 +25,7 @@
     "order": 4,
     "summary": "Rumpelstiltskin spins the third room of straw after the girl promises him her first child if she becomes Queen.",
     "characters_present": ["miller_daughter", "rumpelstiltskin", "king"],
-    "known_by": ["miller_daughter", "rumpelstiltskin", "king"]
+    "known_by": ["miller_daughter", "rumpelstiltskin"]
   },
   {
     "id": "queen_has_baby",

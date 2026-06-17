@@ -1,26 +1,22 @@
 # POVTales
 
-What if stories were told from the perspective of the characters?
+POVTales is a Streamlit app for chatting with story characters.
 
-POVTales is a Streamlit app for chatting with story characters. It loads local story packages, uses each package as canon, and keeps the conversation aware of character point of view, story timeline, and reader age.
+It loads local story packages, uses each package as canon, and shapes responses around the selected character, story timeline, response mode, and reader age. The goal is not a generic character chatbot; it is a grounded reading companion that can answer questions, explore motivations, and play with "what if" ideas while staying anchored to the supplied text.
 
-The app does not fetch story text from the web at runtime. A story becomes available only when it has a local package under `stories/`.
+The app does not fetch story text from the web at runtime. A story is available only when it has a local package under `stories/`.
 
-## Current Features
+## Features
 
-- Dynamic story and character loading from local story packages
-- Character profiles with voice, traits, and goals
-- Full-story retrieval over timeline-tagged source passages
-- Timeline-aware character context
-- Optional canon, POV, and tone validation with one revision pass
+- Automatic story and character loading from local story packages
+- Character profiles with voice, traits, goals, fears, and relationships
+- Retrieval over timeline-tagged source passages
+- Character knowledge context from timeline `known_by` data
+- Response modes for chat, retelling, motivation, what-if questions, and scene continuation
 - Reader-age guidance in the system prompt
-- Deterministic evals for story packages, timeline knowledge, and source tags
-
-## Project Roadmap
-
-See [ROADMAP.md](ROADMAP.md) for the planned path toward multi-story support, timeline-aware roleplay, canon validation, evaluations, and an MCP server.
-
-For a deeper explanation of the engine, see [ARCHITECTURE.md](ARCHITECTURE.md).
+- Optional response validation with one revision pass
+- Optional grounding details for debugging retrieved context
+- Local and live evaluation suites
 
 ## Run Locally
 
@@ -31,45 +27,29 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Enter your OpenAI API key in the sidebar when the app opens. Then choose:
+Provide an OpenAI API key in one of these places:
 
-- Story
-- Character
-- Reader age
-- Model
+- Streamlit sidebar input
+- `OPENAI_API_KEY` in your shell
+- `.streamlit/secrets.toml`
+- `.env`
 
-Advanced debug controls are available in the sidebar expander:
+Local secret files are ignored by git.
 
-- Whether to validate responses
-- Whether to show grounding details
+## Use The App
 
-The app uses the full local source story as canon, so characters can discuss the whole story when asked.
+Choose a story, character, response mode, reader age, and model from the sidebar. The main chat then answers as the selected character.
 
-## Manual Smoke Test
+Advanced controls live in a sidebar expander:
 
-After starting Streamlit, try:
+- `Validate responses`: asks the model to review the draft answer for canon, point of view, age, and tone issues. This can add one or two extra model calls.
+- `Show grounding details`: displays retrieved source passages and validation details for debugging.
 
-- `Snow White` / `Queen`: ask what happened in the forest. With defaults, she can discuss the full story.
-- `The Cask of Amontillado` / `Fortunato`: ask why Montresor is taking him to the vaults. He can answer with the full story canon available.
-- Toggle `Show grounding details` to inspect the retrieved source passages and validation result.
+Good smoke-test prompts:
 
-`Validate responses` can add up to two extra model calls per answer: one validation call, and one revision call only if validation fails.
-
-## Run Evaluations
-
-The deterministic evaluation suite checks story package wiring, timeline knowledge, and source passage tags without calling the OpenAI API:
-
-```bash
-.venv/bin/python evals/run_evals.py
-```
-
-Results are written to `evals/results/`.
-
-## Validation
-
-When `Validate responses` is enabled, POVTales asks the model to review each draft response against the story timeline, source passages, character point of view, and reader age. If the validator finds an issue, the app asks for one revised response before displaying it.
-
-Use `Show grounding details` to inspect the retrieved source context and validation result for each answer.
+- `Snow White` / `Queen`: "What happened in the forest?"
+- `The Cask of Amontillado` / `Fortunato` / `Explain Motivation`: "Why is Montresor taking you to the vaults?"
+- `Rumpelstiltskin` / `Miller's Daughter` / `What If`: "What might have happened if you never had a child?"
 
 ## Story Packages
 
@@ -84,7 +64,14 @@ stories/
     timeline.json
 ```
 
-The app discovers packages automatically as long as all four files exist. Timeline `known_by` values should use character ids; those events give the chatbot character-specific context while retrieval can use the full local source story.
+The app discovers packages automatically when all four files exist.
+
+- `source.txt`: the story text used for retrieval and grounding.
+- `metadata.json`: title, genre, source notes, and recommended age range.
+- `characters.json`: playable characters, voice, traits, goals, fears, and relationships.
+- `timeline.json`: ordered story events, character presence, character knowledge, and source passage tags.
+
+Timeline `known_by` values should use character ids. These events give the chatbot character-specific context, while retrieval can still search the full local source.
 
 ## Included Stories
 
@@ -106,3 +93,35 @@ The app discovers packages automatically as long as all four files exist. Timeli
 | --- | --- |
 | [The Cask of Amontillado](stories/the_cask_of_amontillado/source.txt) | Montresor, Fortunato, Luchresi, Montresor's Attendant |
 | [The Tell-Tale Heart](stories/the_tell_tale_heart/source.txt) | Narrator, Old Man, Police Officer, Neighbor |
+
+## Evaluations
+
+Data evals check story package wiring, timeline knowledge, and source passage tags without calling the OpenAI API:
+
+```bash
+.venv/bin/python evals/run_evals.py
+```
+
+Saved-chat quality evals check transcript behavior with deterministic rules:
+
+```bash
+.venv/bin/python evals/run_quality_evals.py
+```
+
+Run both local suites together:
+
+```bash
+.venv/bin/python evals/run_comprehensive_evals.py --allow-quality-failures
+```
+
+Live model-response evals use `gpt-5-nano` for generation and judging. Put an API key in ignored `api_key.txt` or set `OPENAI_API_KEY`, then run:
+
+```bash
+.venv/bin/python evals/run_live_evals.py
+```
+
+Reports are written to `evals/results/`, which is ignored by git. See [evals/README.md](evals/README.md) for case fields and runner details.
+
+## Roadmap
+
+See [ROADMAP.md](ROADMAP.md) for completed phases and planned work on larger story worlds, richer story data, and agentic story exploration.

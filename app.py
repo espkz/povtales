@@ -1,13 +1,48 @@
+import os
+from pathlib import Path
+
 import streamlit as st
 
 from story_data import (
     STORY_PACKAGES,
     get_character_names,
 )
-from utils import StoryChatbot, normalize_api_key
+from utils import RESPONSE_MODES, StoryChatbot, normalize_api_key
 
 
 MODEL_OPTIONS = ["gpt-4o-mini", "gpt-4o", "gpt-5-nano", "gpt-5-mini"]
+ENV_PATH = Path(__file__).resolve().parent / ".env"
+
+
+def get_configured_api_key():
+    return (
+        os.environ.get("OPENAI_API_KEY")
+        or get_streamlit_secret("OPENAI_API_KEY")
+        or get_dotenv_value("OPENAI_API_KEY")
+        or ""
+    )
+
+
+def get_streamlit_secret(key):
+    try:
+        return st.secrets.get(key, "")
+    except Exception:
+        return ""
+
+
+def get_dotenv_value(key):
+    if not ENV_PATH.exists():
+        return ""
+
+    for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+        name, value = stripped.split("=", 1)
+        if name.strip() == key:
+            return value.strip().strip("\"'")
+
+    return ""
 
 
 st.set_page_config(page_title="POVTales", layout="wide")
@@ -21,7 +56,12 @@ if not STORY_PACKAGES:
 
 with st.sidebar:
     st.header("API Key")
-    api_key = st.text_input("OpenAI API key", type="password")
+    configured_api_key = get_configured_api_key()
+    api_key = st.text_input(
+        "OpenAI API key",
+        value=configured_api_key,
+        type="password",
+    )
     try:
         api_key = normalize_api_key(api_key)
     except ValueError as exc:
@@ -36,6 +76,7 @@ with st.sidebar:
         st.stop()
 
     character = st.selectbox("Character", get_character_names(selected_story))
+    response_mode = st.selectbox("Mode", RESPONSE_MODES, index=0)
     age = st.number_input("Reader age", min_value=3, max_value=18, value=8, step=1)
     model = st.selectbox("Model", MODEL_OPTIONS, index=0)
 
@@ -60,6 +101,7 @@ chatbot_config = {
     "role": character,
     "age": age,
     "model": model,
+    "response_mode": response_mode,
     "api_key": api_key,
     "validate_responses": validate_responses,
 }
@@ -101,8 +143,16 @@ if prompt := st.chat_input(f"Speak to {character}..."):
         st.markdown(response)
         if show_grounding:
             with st.expander("Grounding details"):
-                st.markdown("**Source Context**")
-                st.code(chatbot.last_context or "No context recorded.")
+                st.markdown("**Retrieved Sources**")
+                if chatbot.last_sources:
+                    for index, source in enumerate(chatbot.last_sources, start=1):
+                        st.markdown(
+                            f"{index}. Event {source['event_order']}: "
+                            f"`{source['event_id']}`"
+                        )
+                        st.code(source["text"])
+                else:
+                    st.caption("No source passages recorded.")
                 if chatbot.last_validation is not None:
                     st.markdown("**Validation**")
                     st.json(

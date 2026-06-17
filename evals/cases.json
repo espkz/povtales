@@ -108,6 +108,26 @@
     "expected_source_event_ids": ["name_challenge", "messenger_hears_name"]
   },
   {
+    "id": "rumpelstiltskin_king_does_not_know_child_bargain",
+    "story": "Rumpelstiltskin",
+    "character": "King",
+    "timeline_event_id": "queen_has_baby",
+    "prompt": "Did the Queen promise the child to anyone?",
+    "expected_known_event_ids": [
+      "miller_boasts",
+      "first_room_gold",
+      "second_room_gold",
+      "queen_has_baby"
+    ],
+    "forbidden_known_event_ids": [
+      "child_promise",
+      "name_challenge",
+      "messenger_hears_name",
+      "queen_guesses_name"
+    ],
+    "expected_source_event_ids": ["child_promise", "queen_has_baby", "queen_guesses_name"]
+  },
+  {
     "id": "beauty_beast_profile_and_source_cover_transformation",
     "story": "Beauty and the Beast",
     "character": "Beast",
